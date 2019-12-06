@@ -2,11 +2,84 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Helena-Li.github.io</id>
     <title>Web development</title>
-    <updated>2019-12-06T04:44:09.222Z</updated>
+    <updated>2019-12-06T04:48:17.209Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Helena-Li.github.io"/>
     <link rel="self" href="https://Helena-Li.github.io/atom.xml"/>
     <logo>https://Helena-Li.github.io/images/avatar.png</logo>
     <icon>https://Helena-Li.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, Web development</rights>
+    <entry>
+        <title type="html"><![CDATA[# Tag helpers not creating proper URL]]></title>
+        <id>https://Helena-Li.github.io/post/tag-helpers-not-creating-proper-url</id>
+        <link href="https://Helena-Li.github.io/post/tag-helpers-not-creating-proper-url">
+        </link>
+        <updated>2019-12-06T06:05:05.000Z</updated>
+        <content type="html"><![CDATA[<p>Tag Helpers enable server-side code to participate in creating and rendering HTML elements in Razor files. There are many built-in Tag Helpers for common tasks - such as creating forms, links, image version number.<br>
+We are going to solve the issue that URL is not generated properly. There are several things to check:</p>
+<h3 id="import-tag-helper-correctly">Import tag helper correctly</h3>
+<p>In the _ViewImports.cshtml file, import tag helper as follow.</p>
+<pre><code>@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+</code></pre>
+<p>Notice:  _ViewImports.cshtml should under the &quot;Views&quot; folder, since it works only for files in the &quot;Views&quot; directory or sub-directory.</p>
+<h3 id="include-tag-helper-in-dependencies">Include tag helper in dependencies</h3>
+<p>Make sure &quot;Microsoft.AspNetCore.Mvc.TagHelpers&quot; is referred in the dependencies folder in Nuget.</p>
+<h3 id="check-self-defined-routes-in-startupcs">Check self-defined routes in Startup.cs</h3>
+<p>Check the routes whether the codes in .cshtml files is consist with the template route.</p>
+<p>For example in my case, my route is :</p>
+<pre><code class="language-c#">Startup.cs:
+
+app.UseMvc(routes =&gt;
+            {
+                routes.MapRoute(&quot;default&quot;, &quot;{controller=home}/{action=index}/{id?}&quot;);
+            });
+</code></pre>
+<p>When using tag helper for generate link, codes are like this in _​Layout.cshtml :</p>
+<pre><code class="language-html">&lt;ul class=&quot;navbar-nav&quot;&gt;
+    &lt;li class=&quot;nav-item&quot;&gt;
+       &lt;a asp-action=&quot;index&quot; asp-controller=&quot;home&quot; class=&quot;nav-link&quot;&gt;List&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li class=&quot;nav-item&quot;&gt;
+       &lt;a asp-action=&quot;create&quot; asp-controller=&quot;home&quot; class=&quot;nav-link&quot;&gt;Create&lt;/a&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+<p>Then the links are generated :</p>
+<pre><code class="language-html"> &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;collapseNabar&quot;&gt;
+      &lt;ul class=&quot;navbar-nav&quot;&gt;
+            &lt;li class=&quot;nav-item&quot;&gt;
+                &lt;a class=&quot;nav-link&quot; href=&quot;/&quot;&gt;List&lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li class=&quot;nav-item&quot;&gt;
+                &lt;a class=&quot;nav-link&quot; href=&quot;/home/create&quot;&gt;Create&lt;/a&gt;
+            &lt;/li&gt;
+      &lt;/ul&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Notice: If you only use app.UseMvc() in the Startup.cs, without a route defination. There might have issues, such as links are not generated. This is because you didn't give a template for routes, tag helper only return a &quot;&quot; as the value of href.</p>
+<h3 id="check-attribute-routing">Check Attribute routing</h3>
+<p>Strange results occur when you define both self-defined routes in Startup.cs and attribute routing in controller.  Try to use self-defined routes in Startup.cs only when using tag helper, or use app.UseMvc() + attribute routing in controller.</p>
+<pre><code class="language-c#">HomeController:
+
+[Route(&quot;&quot;)]   // delete these attribute routing when use self-defined routes
+[Route(&quot;Home&quot;)]
+[Route(&quot;Home/Index&quot;)] 
+public ViewResult Index()
+{
+    var model = _employeeRepository.GetAllEmployee();
+    return View(model);
+}
+</code></pre>
+<pre><code class="language-c#">public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            app.UseStaticFiles();
+            app.UseMvc();
+        }
+</code></pre>
+]]></content>
+    </entry>
 </feed>
