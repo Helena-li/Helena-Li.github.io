@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Helena-Li.github.io</id>
     <title>Web development</title>
-    <updated>2019-12-23T00:47:15.609Z</updated>
+    <updated>2019-12-23T00:48:44.905Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Helena-Li.github.io"/>
     <link rel="self" href="https://Helena-Li.github.io/atom.xml"/>
@@ -14,7 +14,7 @@
         <id>https://Helena-Li.github.io/post/sign-in-with-google-api-getexternallogininfoasync-return-null</id>
         <link href="https://Helena-Li.github.io/post/sign-in-with-google-api-getexternallogininfoasync-return-null">
         </link>
-        <updated>2019-12-23T05:00:30.000Z</updated>
+        <updated>2019-12-23T10:00:30.000Z</updated>
         <content type="html"><![CDATA[<p>When I try to sign in with Google authentication, I encounter an issue that I can't receive information by using signInManager.GetExternalLoginInfoAsync(). This is because Google plus is shutting down. Here I give the overall codes and sources for google authentication. I used ASP.NET core 2.2.</p>
 <p>The process of create a Google API console project is :</p>
 <ol>
