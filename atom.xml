@@ -2,13 +2,73 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Helena-Li.github.io</id>
     <title>Web development</title>
-    <updated>2019-12-06T04:56:07.150Z</updated>
+    <updated>2019-12-23T00:46:29.987Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Helena-Li.github.io"/>
     <link rel="self" href="https://Helena-Li.github.io/atom.xml"/>
     <logo>https://Helena-Li.github.io/images/avatar.png</logo>
     <icon>https://Helena-Li.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, Web development</rights>
+    <entry>
+        <title type="html"><![CDATA[Sign in with Google+ API - GetExternalLoginInfoAsync return null]]></title>
+        <id>https://Helena-Li.github.io/post/sign-in-with-google-api-getexternallogininfoasync-return-null</id>
+        <link href="https://Helena-Li.github.io/post/sign-in-with-google-api-getexternallogininfoasync-return-null">
+        </link>
+        <updated>2019-12-23T05:00:30.000Z</updated>
+        <content type="html"><![CDATA[<p>When I try to sign in with Google authentication, I encounter an issue that I can't receive information by using signInManager.GetExternalLoginInfoAsync(). This is because Google plus is shutting down. Here I give the overall codes and sources for google authentication. I used ASP.NET core 2.2.</p>
+<p>The process of create a Google API console project is :</p>
+<ol>
+<li>Create Google oauth credentials client Id and secret.</li>
+<li>Set up API and configure</li>
+</ol>
+<h2 id="1-create-google-oauth-credentials-client-id-and-secret">1. Create Google oauth credentials client Id and secret.</h2>
+<p>Learn to create client Id and secret by this link: https://docs.microsoft.com/en-US/aspnet/core/security/authentication/social/google-logins?view=aspnetcore-3.1</p>
+<p>Notice: enable SSL, e.g., use https://localhost:44306/signin-google for Authorised redirect URIs in oauth client IDs in Credentials.</p>
+<h2 id="2-set-up-api-and-configure">2. Set up API and configure</h2>
+<p>In startup.cs, add configure service :</p>
+<pre><code class="language-c#">services.AddAuthentication().AddGoogle(option =&gt;
+            {
+                option.ClientId = &quot;597035172561-c50s2qu28fj78tl1lmivb6v8tpsr9qta.apps.googleusercontent.com&quot;;
+                option.ClientSecret = &quot;vGIslMG3NOGqcLKdc8uwmu-n&quot;;
+                //option.UserInformationEndpoint = &quot;https://www.googleapis.com/oauth2/v1/certs&quot;;
+                option.UserInformationEndpoint = &quot;https://www.googleapis.com/oauth2/v2/userinfo&quot;;
+                option.ClaimActions.Clear();
+                option.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, &quot;id&quot;);
+                option.ClaimActions.MapJsonKey(ClaimTypes.Name, &quot;name&quot;);
+                option.ClaimActions.MapJsonKey(ClaimTypes.GivenName, &quot;given_name&quot;);
+                option.ClaimActions.MapJsonKey(ClaimTypes.Surname, &quot;family_name&quot;);
+                option.ClaimActions.MapJsonKey(&quot;urn:google:profile&quot;, &quot;link&quot;);
+                option.ClaimActions.MapJsonKey(ClaimTypes.Email, &quot;email&quot;);
+            });
+</code></pre>
+<p>Notice: just input clientID and ClientSecret will through an exception &quot;HttpRequestException: An error occurred when retrieving Google user information (Forbidden). Please check if the authentication information is correct and the corresponding Google+ API is enabled.&quot; This is because Google plus is shutting down. I tried to add an UserInformationEndpoint but found that I can't receive information by using signInManager.GetExternalLoginInfoAsync().  Codes in the controller are:</p>
+<pre><code class="language-c#"> [HttpPost]
+ [AllowAnonymous]
+ public IActionResult ExternalLogin(string provider, string returnUrl)
+{
+    var redirectUrl = Url.Action(&quot;ExternalLoginCallback&quot;, &quot;account&quot;,
+                new { ReturnUrl = returnUrl });
+    var properties = signInManager
+        .ConfigureExternalAuthenticationProperties(provider,redirectUrl);
+    return new ChallengeResult(provider, properties);
+}
+</code></pre>
+<pre><code class="language-c#"> [AllowAnonymous]
+public async Task&lt;IActionResult&gt; ExternalLoginCallback
+            (string returnUrl = null,string remoteError = null)
+{
+     returnUrl = returnUrl ?? Url.Content(&quot;~/&quot;);
+     var info = await signInManager.GetExternalLoginInfoAsync();
+    // info should contain user information after successful signed in google.
+     var signInResult = await signInManager.
+         ExternalLoginSignInAsync(info.LoginProvider,
+                info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+}
+</code></pre>
+<h2 id="official-announcement">Official announcement</h2>
+<p>https://github.com/aspnet/AspNetCore/issues/6486</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[# Tag helpers not creating proper URL]]></title>
         <id>https://Helena-Li.github.io/post/tag-helpers-not-creating-proper-url</id>
