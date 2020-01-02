@@ -1,21 +1,102 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://Helena-Li.github.io</id>
-    <title>Web development</title>
-    <updated>2020-01-02T22:07:11.345Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://Helena-Li.github.io"/>
-    <link rel="self" href="https://Helena-Li.github.io/atom.xml"/>
-    <logo>https://Helena-Li.github.io/images/avatar.png</logo>
-    <icon>https://Helena-Li.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, Web development</rights>
-    <entry>
-        <title type="html"><![CDATA[Integration with Google Docs to export documents in ASP.NET core ]]></title>
-        <id>https://Helena-Li.github.io/post/integration-with-google-docs-to-export-documents-in-aspnet-core</id>
-        <link href="https://Helena-Li.github.io/post/integration-with-google-docs-to-export-documents-in-aspnet-core">
-        </link>
-        <updated>2020-01-03T03:06:23.000Z</updated>
-        <content type="html"><![CDATA[<!-- more -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Integration with Google Docs to export documents in ASP.NET core  | Web development</title>
+<meta name="description" content="">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Helena-Li.github.io/favicon.ico?v=1578002822095">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://Helena-Li.github.io/styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Helena-Li.github.io">
+        <img src="https://Helena-Li.github.io/images/avatar.png?v=1578002822095" class="site-logo">
+        <h1 class="site-title">Web development</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            Home
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            List of Articles
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            Tags
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            About
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Helena-Li.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Integration with Google Docs to export documents in ASP.NET core </h2>
+            <div class="post-date">2020-01-03</div>
+            
+            <div class="post-content">
+              <!-- more -->
 <p>APIs provided by Google Docs include creating new document, getting a document and  updating a document. However, the function is limited. For example, people can't copy paragraphs; insert text or update styles need the index of the text in Google docs.</p>
 <p>Because there are not many example codes for ASP.NET core with C#, I write this article.</p>
 <p>To integrate with Google Docs, there are steps:</p>
@@ -341,139 +422,55 @@ BatchUpdateDocumentResponse response = service.Documents
 
     }
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Sign in with Google+ API - GetExternalLoginInfoAsync return null]]></title>
-        <id>https://Helena-Li.github.io/post/sign-in-with-google-api-getexternallogininfoasync-return-null</id>
-        <link href="https://Helena-Li.github.io/post/sign-in-with-google-api-getexternallogininfoasync-return-null">
-        </link>
-        <updated>2019-12-23T10:00:30.000Z</updated>
-        <content type="html"><![CDATA[<p>When I try to sign in with Google authentication, I encounter an issue that I can't receive information by using signInManager.GetExternalLoginInfoAsync(). This is because Google plus is shutting down. Here I give the overall codes and sources for google authentication. I used ASP.NET core 2.2.</p>
-<p>The process of create a Google API console project is :</p>
-<ol>
-<li>Create Google oauth credentials client Id and secret.</li>
-<li>Set up API and configure</li>
-</ol>
-<h2 id="1-create-google-oauth-credentials-client-id-and-secret">1. Create Google oauth credentials client Id and secret.</h2>
-<p>Learn to create client Id and secret by this link: https://docs.microsoft.com/en-US/aspnet/core/security/authentication/social/google-logins?view=aspnetcore-3.1</p>
-<p>Notice: enable SSL, e.g., use https://localhost:44306/signin-google for Authorised redirect URIs in oauth client IDs in Credentials.</p>
-<h2 id="2-set-up-api-and-configure">2. Set up API and configure</h2>
-<p>In startup.cs, add configure service :</p>
-<pre><code class="language-c#">services.AddAuthentication().AddGoogle(option =&gt;
-            {
-                option.ClientId = &quot;597035172561-c50s2qu28fj78tl1lmivb6v8tpsr9qta.apps.googleusercontent.com&quot;;
-                option.ClientSecret = &quot;vGIslMG3NOGqcLKdc8uwmu-n&quot;;
-                //option.UserInformationEndpoint = &quot;https://www.googleapis.com/oauth2/v1/certs&quot;;
-                option.UserInformationEndpoint = &quot;https://www.googleapis.com/oauth2/v2/userinfo&quot;;
-                option.ClaimActions.Clear();
-                option.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, &quot;id&quot;);
-                option.ClaimActions.MapJsonKey(ClaimTypes.Name, &quot;name&quot;);
-                option.ClaimActions.MapJsonKey(ClaimTypes.GivenName, &quot;given_name&quot;);
-                option.ClaimActions.MapJsonKey(ClaimTypes.Surname, &quot;family_name&quot;);
-                option.ClaimActions.MapJsonKey(&quot;urn:google:profile&quot;, &quot;link&quot;);
-                option.ClaimActions.MapJsonKey(ClaimTypes.Email, &quot;email&quot;);
-            });
-</code></pre>
-<p>Notice: just input clientID and ClientSecret will through an exception &quot;HttpRequestException: An error occurred when retrieving Google user information (Forbidden). Please check if the authentication information is correct and the corresponding Google+ API is enabled.&quot; This is because Google plus is shutting down. I tried to add an UserInformationEndpoint but found that I can't receive information by using signInManager.GetExternalLoginInfoAsync().  Codes in the controller are:</p>
-<pre><code class="language-c#"> [HttpPost]
- [AllowAnonymous]
- public IActionResult ExternalLogin(string provider, string returnUrl)
-{
-    var redirectUrl = Url.Action(&quot;ExternalLoginCallback&quot;, &quot;account&quot;,
-                new { ReturnUrl = returnUrl });
-    var properties = signInManager
-        .ConfigureExternalAuthenticationProperties(provider,redirectUrl);
-    return new ChallengeResult(provider, properties);
-}
-</code></pre>
-<pre><code class="language-c#"> [AllowAnonymous]
-public async Task&lt;IActionResult&gt; ExternalLoginCallback
-            (string returnUrl = null,string remoteError = null)
-{
-     returnUrl = returnUrl ?? Url.Content(&quot;~/&quot;);
-     var info = await signInManager.GetExternalLoginInfoAsync();
-    // info should contain user information after successful signed in google.
-     var signInResult = await signInManager.
-         ExternalLoginSignInAsync(info.LoginProvider,
-                info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
-}
-</code></pre>
-<h2 id="official-announcement">Official announcement</h2>
-<p>https://github.com/aspnet/AspNetCore/issues/6486</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Tag helpers not creating proper URL]]></title>
-        <id>https://Helena-Li.github.io/post/tag-helpers-not-creating-proper-url</id>
-        <link href="https://Helena-Li.github.io/post/tag-helpers-not-creating-proper-url">
-        </link>
-        <updated>2019-12-06T21:05:05.000Z</updated>
-        <content type="html"><![CDATA[<p>Tag Helpers enable server-side code to participate in creating and rendering HTML elements in Razor files. There are many built-in Tag Helpers for common tasks - such as creating forms, links, image version number.<br>
-We are going to solve the issue that URL is not generated properly. There are several things to check:</p>
-<h3 id="import-tag-helper-correctly">Import tag helper correctly</h3>
-<p>In the _ViewImports.cshtml file, import tag helper as follow.</p>
-<pre><code>@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-</code></pre>
-<p>Notice:  _ViewImports.cshtml should under the &quot;Views&quot; folder, since it works only for files in the &quot;Views&quot; directory or sub-directory.</p>
-<h3 id="include-tag-helper-in-dependencies">Include tag helper in dependencies</h3>
-<p>Make sure &quot;Microsoft.AspNetCore.Mvc.TagHelpers&quot; is referred in the dependencies folder in Nuget.</p>
-<h3 id="check-self-defined-routes-in-startupcs">Check self-defined routes in Startup.cs</h3>
-<p>Check the routes whether the codes in .cshtml files is consist with the template route.</p>
-<p>For example in my case, my route is :</p>
-<pre><code class="language-c#">Startup.cs:
 
-app.UseMvc(routes =&gt;
-            {
-                routes.MapRoute(&quot;default&quot;, &quot;{controller=home}/{action=index}/{id?}&quot;);
-            });
-</code></pre>
-<p>When using tag helper for generate link, codes are like this in _​Layout.cshtml :</p>
-<pre><code class="language-html">&lt;ul class=&quot;navbar-nav&quot;&gt;
-    &lt;li class=&quot;nav-item&quot;&gt;
-       &lt;a asp-action=&quot;index&quot; asp-controller=&quot;home&quot; class=&quot;nav-link&quot;&gt;List&lt;/a&gt;
-    &lt;/li&gt;
-    &lt;li class=&quot;nav-item&quot;&gt;
-       &lt;a asp-action=&quot;create&quot; asp-controller=&quot;home&quot; class=&quot;nav-link&quot;&gt;Create&lt;/a&gt;
-    &lt;/li&gt;
-&lt;/ul&gt;
-</code></pre>
-<p>Then the links are generated :</p>
-<pre><code class="language-html"> &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;collapseNabar&quot;&gt;
-      &lt;ul class=&quot;navbar-nav&quot;&gt;
-            &lt;li class=&quot;nav-item&quot;&gt;
-                &lt;a class=&quot;nav-link&quot; href=&quot;/&quot;&gt;List&lt;/a&gt;
-            &lt;/li&gt;
-            &lt;li class=&quot;nav-item&quot;&gt;
-                &lt;a class=&quot;nav-link&quot; href=&quot;/home/create&quot;&gt;Create&lt;/a&gt;
-            &lt;/li&gt;
-      &lt;/ul&gt;
-&lt;/div&gt;
-</code></pre>
-<p>Notice: If you only use app.UseMvc() in the Startup.cs, without a route defination. There might have issues, such as links are not generated. This is because you didn't give a template for routes, tag helper only return a &quot;&quot; as the value of href.</p>
-<h3 id="check-attribute-routing">Check Attribute routing</h3>
-<p>Strange results occur when you define both self-defined routes in Startup.cs and attribute routing in controller.  Try to use self-defined routes in Startup.cs only when using tag helper, or use app.UseMvc() + attribute routing in controller.</p>
-<pre><code class="language-c#">HomeController:
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://Helena-Li.github.io/tag/D6EtV_gkA" class="tag">
+                    ASP.NET core MVC
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Helena-Li.github.io/post/sign-in-with-google-api-getexternallogininfoasync-return-null">
+                  <h3 class="post-title">
+                    Sign in with Google+ API - GetExternalLoginInfoAsync return null
+                  </h3>
+                </a>
+              </div>
+            
 
-[Route(&quot;&quot;)]   // delete these attribute routing when use self-defined routes
-[Route(&quot;Home&quot;)]
-[Route(&quot;Home/Index&quot;)] 
-public ViewResult Index()
-{
-    var model = _employeeRepository.GetAllEmployee();
-    return View(model);
-}
-</code></pre>
-<pre><code class="language-c#">public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            app.UseStaticFiles();
-            app.UseMvc();
-        }
-</code></pre>
-]]></content>
-    </entry>
-</feed>
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>
