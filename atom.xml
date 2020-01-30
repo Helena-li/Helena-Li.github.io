@@ -2,13 +2,205 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Helena-Li.github.io</id>
     <title>Web development</title>
-    <updated>2020-01-02T22:07:29.485Z</updated>
+    <updated>2020-01-30T11:37:05.367Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Helena-Li.github.io"/>
     <link rel="self" href="https://Helena-Li.github.io/atom.xml"/>
     <logo>https://Helena-Li.github.io/images/avatar.png</logo>
     <icon>https://Helena-Li.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Web development</rights>
+    <entry>
+        <title type="html"><![CDATA[Ways of using AutoMapper in .NET core]]></title>
+        <id>https://Helena-Li.github.io/post/two-ways-to-use-automapper-in-net-core</id>
+        <link href="https://Helena-Li.github.io/post/two-ways-to-use-automapper-in-net-core">
+        </link>
+        <updated>2020-01-24T18:29:54.000Z</updated>
+        <content type="html"><![CDATA[<p>Previously, I use this way to map an entity to a data transfer object(DTO):</p>
+<pre><code class="language-c#">public class Company
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Introduction { get; set; }
+
+        public ICollection&lt;Employee&gt; Employees { get; set; }
+    }
+    
+    
+public class CompanyDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+
+</code></pre>
+<pre><code class="language-c#">[ApiController]
+    [Route(&quot;company&quot;)]
+    public class CompanyController : Controller
+    {
+        private readonly ICompanyRepository companyRepository;
+        private readonly IMapper mapper;
+
+        public CompanyController(ICompanyRepository companyRepository,IMapper mapper)
+        {
+            this.companyRepository = companyRepository;
+            this.mapper = mapper;
+        }
+        [HttpGet]
+        [Route(&quot;&quot;)]
+        public async Task&lt;ActionResult&lt;IEnumerable&lt;CompanyDto&gt;&gt;&gt; GetCompanies()
+        {
+            var companies = await companyRepository.GetCompaniesAsync();
+            var companyDtos = mapper.Map&lt;IEnumerable&lt;CompanyDto&gt;&gt;(companies);
+            var model = new List&lt;CompanyDto&gt;();
+            foreach (var company in companies)
+            {
+                CompanyDto companyDto = new CompanyDto
+                {
+                    Id=company.Id,
+                    Name=company.Name
+                };
+                model.Add(companyDto);
+            }
+            return Ok(model);
+        }
+    }
+</code></pre>
+<p>However, if we use AutoMapper, the situation becomes much easier. There are 4 steps.</p>
+<h5 id="install-package">Install package :</h5>
+<p>Install AutoMapper.Extensions.Microsoft.DependencyInjection by Nuget package manager.</p>
+<h5 id="create-profile">Create profile</h5>
+<p>Create a class to build profile:</p>
+<pre><code class="language-c#">using AutoMapper;
+
+public class CompanyProfile:Profile
+    {
+        public CompanyProfile()
+        {
+            CreateMap&lt;Company, CompanyDto&gt;();
+        }
+    }
+</code></pre>
+<h5 id="set-up-startupcs">Set up startup.cs</h5>
+<p>There are two way of append AutoMapper :</p>
+<pre><code class="language-c#">public void ConfigureServices(IServiceCollection services)
+{
+	// add AutoMapper
+	services.AddAutoMapper();
+}
+</code></pre>
+<p>or</p>
+<pre><code class="language-c#">public void ConfigureServices(IServiceCollection services)
+{
+    // add AutoMapper
+            var mappingConfig = new MapperConfiguration(mc =&gt;
+            {
+                mc.AddProfile(new CompanyProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+}
+</code></pre>
+<p>These two ways get almost same results.</p>
+<h5 id="using-imapper-in-a-controller">Using IMapper in a controller</h5>
+<p>By using AutoMapper, the codes are as simple as follow:</p>
+<pre><code class="language-c#">    [ApiController]
+    [Route(&quot;company&quot;)]
+    public class CompanyController : Controller
+    {
+        private readonly ICompanyRepository companyRepository;
+        private readonly IMapper mapper;
+
+        public CompanyController(ICompanyRepository companyRepository,
+                                 IMapper mapper)
+        {
+            this.companyRepository = companyRepository;
+            this.mapper = mapper;
+        }
+        [HttpGet]
+        [Route(&quot;&quot;)]
+        public async Task&lt;ActionResult&lt;IEnumerable&lt;CompanyDto&gt;&gt;&gt; GetCompanies()
+        {
+            var companies = await companyRepository.GetCompaniesAsync();
+            var companyDtos = mapper.Map&lt;IEnumerable&lt;CompanyDto&gt;&gt;(companies);
+            return Ok(companyDtos);
+        }
+    }
+</code></pre>
+<p>Notice:</p>
+<ol>
+<li>Entities can either contain more properties or less properties than target DTO</li>
+<li>If the name of the Properties are different between two classes, or people need to combine two properties, it also works fine</li>
+<li>People can combine two entities into one DTO</li>
+</ol>
+<h5 id="1contain-more-or-less-properties">1.Contain more or less properties</h5>
+<p>As is seen in the beginning, Company class contains a &quot;Introduction&quot; property, using AutoMapper can automatic ignore this property without a null exception. If Company contains less property, for instance, CompanyDto contains a &quot;Location&quot; property, after mapping, the &quot;Location&quot; field in the object will be null.</p>
+<h5 id="2-difference-or-combination">2. Difference or Combination</h5>
+<p>When property's name is different between the classes, there are methods in AutoMapper can be used. For example, we change the name property to CompayName.</p>
+<pre><code class="language-c#">public class Company
+    {
+        public int Id { get; set; }
+        public string CompanyName { get; set; }
+        public string Introduction { get; set; }
+
+        public ICollection&lt;Employee&gt; Employees { get; set; }
+    }
+    
+    
+public class CompanyDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+
+</code></pre>
+<p>Create mapper can be:</p>
+<pre><code class="language-c#">CreateMap&lt;Company, CompanyDto&gt;()
+                .ForMember(dest=&gt;dest.CompanyName,
+                opt=&gt;opt.MapFrom(src=&gt;src.Name));
+</code></pre>
+<p>Or if you want to combine two property together in Employee:</p>
+<pre><code class="language-c#">public class Employee
+    {
+        public int Id { get; set; }
+        public int CompanyId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
+        public Company Company { get; set; }
+    }
+    
+ public class EmployeeDto
+    {
+        public int Id { get; set; }
+        public int CompanyId { get; set; }
+
+        public string Name { get; set; }
+        public string CompanyName { get; set; }
+    }
+    
+</code></pre>
+<p>Create mapper can be:</p>
+<pre><code class="language-c#">CreateMap&lt;Employee, EmployeeDto&gt;()
+                .ForMember(dest =&gt; dest.Name,
+                opt =&gt; opt.MapFrom(src =&gt; $&quot;{src.FirstName} {src.LastName}&quot;));
+</code></pre>
+<h5 id="3-combine-two-entities-together">3. Combine two entities together</h5>
+<p>When People want to combine Employee and Company to EmployeeDto, it can be:</p>
+<pre><code class="language-c#">[HttpGet]
+[Route(&quot;&quot;)]
+public async Task&lt;ActionResult&lt;IEnumerable&lt;EmpDto&gt;&gt;&gt; GetCompanies()
+{
+   var companies = await companyRepository.GetCompaniesAsync();
+   var emps = await companyRepository.GetEmpAsync();
+   var empDtos = mapper.Map&lt; IEnumerable&lt;Company&gt;,
+                 IEnumerable&lt;CompDto&gt;&gt;(companies);
+   mapper.Map&lt;IEnumerable&lt;Employee&gt;,IEnumerable &lt;CompDto&gt;&gt;(emps, empDtos);
+   return Ok(empDtos);
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Integration with Google Docs to export documents in ASP.NET core ]]></title>
         <id>https://Helena-Li.github.io/post/integration-with-google-docs-to-export-documents-in-aspnet-core</id>
