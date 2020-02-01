@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Helena-Li.github.io</id>
     <title>Web development</title>
-    <updated>2020-01-30T11:37:05.367Z</updated>
+    <updated>2020-02-01T02:41:02.089Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Helena-Li.github.io"/>
     <link rel="self" href="https://Helena-Li.github.io/atom.xml"/>
@@ -14,7 +14,7 @@
         <id>https://Helena-Li.github.io/post/two-ways-to-use-automapper-in-net-core</id>
         <link href="https://Helena-Li.github.io/post/two-ways-to-use-automapper-in-net-core">
         </link>
-        <updated>2020-01-24T18:29:54.000Z</updated>
+        <updated>2020-01-24T23:29:54.000Z</updated>
         <content type="html"><![CDATA[<p>Previously, I use this way to map an entity to a data transfer object(DTO):</p>
 <pre><code class="language-c#">public class Company
     {
@@ -118,12 +118,26 @@ public class CompanyProfile:Profile
             this.mapper = mapper;
         }
         [HttpGet]
-        [Route(&quot;&quot;)]
         public async Task&lt;ActionResult&lt;IEnumerable&lt;CompanyDto&gt;&gt;&gt; GetCompanies()
         {
             var companies = await companyRepository.GetCompaniesAsync();
+            // use automapper to map companies to companyDtos
             var companyDtos = mapper.Map&lt;IEnumerable&lt;CompanyDto&gt;&gt;(companies);
             return Ok(companyDtos);
+        }
+
+        [HttpPut(&quot;companyId&quot;)]
+        public async Task&lt;ActionResult&gt; UpdateCompanies(
+            int companyId,CompanyDto companyDto )
+        {
+            var companyEntity = await companyRepository.GetCompaniesAsync(companyId);
+            // map companyEntity to companyDto
+            // update values in companyDto
+            // map back companyDto to Company object
+            // this three things simple done by following sentence
+            mapper.Map(companyDto, companyEntity);
+            await companyRepository.UpdateCompany(companyEntity)
+            return NoContent();
         }
     }
 </code></pre>
