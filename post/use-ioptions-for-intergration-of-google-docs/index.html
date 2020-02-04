@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Use IOptions for intergration of Google Docs | Web development</title>
+<meta name="description" content="">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Helena-Li.github.io/favicon.ico?v=1580789716493">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://Helena-Li.github.io/styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Helena-Li.github.io">
+        <img src="https://Helena-Li.github.io/images/avatar.png?v=1580789716493" class="site-logo">
+        <h1 class="site-title">Web development</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            Home
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            List of Articles
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            Tags
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            About
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Helena-Li.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Use IOptions for intergration of Google Docs</h2>
+            <div class="post-date">2020-02-05</div>
+            
+            <div class="post-content">
+              <p>In the integration of Google Docs, I used a credential file to provide client Id and keys. However, sensitive data should not be used directly in codes. This blog is to use IOptions in ASP.Net to achieve this.</p>
+<p>There are 4 steps:</p>
+<ol>
+<li>create a class to store sensitive data</li>
+<li>set up appsettings.json</li>
+<li>register in startup.cs</li>
+<li>use the sensitive data</li>
+</ol>
+<h3 id="1-create-a-class-to-store-sensitive-data">1. create a class to store sensitive data</h3>
+<pre><code class="language-c#">public class GoogleDocSettings
+    {
+        public string ApplicationNameSetting { get; set; }
+        public string TemplateDocId { get; set; }
+        public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
+    }
+</code></pre>
+<h3 id="2-set-up-appsettingsjson">2. set up appsettings.json</h3>
+<pre><code class="language-c#">&quot;googleDoc&quot;: {
+    &quot;applicationNameSetting&quot;: &quot;Google Docs API&quot;,
+    &quot;templateDocId&quot;: &quot;188888888888888************80c&quot;,
+    &quot;clientId&quot;: &quot;597*******1-g*************q.apps.googleusercontent.com&quot;,
+    &quot;clientSecret&quot;: &quot;l**********P&quot;
+  }
+
+</code></pre>
+<h3 id="3-register-in-startupcs">3. register in startup.cs</h3>
+<pre><code class="language-c#">services.Configure&lt;GoogleDocSettings&gt;(options =&gt;
+            Configuration.GetSection(&quot;googleDoc&quot;).Bind(options));
+
+</code></pre>
+<h3 id="4-use-the-sensitive-data">4. use the sensitive data</h3>
+<pre><code class="language-c#">private readonly GoogleDocSettings googleDoc;
+
+public GoogleService(
+                      IOptions&lt;GoogleDocSettings&gt; googleOptions)
+{
+    this.googleDoc = googleOptions.Value;
+}
+
+</code></pre>
+<pre><code class="language-c#">public async Task&lt;bool&gt; UseGoogleDocs(DemoViewModel model)
+        {
+            try
+            {
+                UserCredential credential;
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    new ClientSecrets { ClientId = googleDoc.ClientId, 
+                    ClientSecret = googleDoc.ClientSecret },
+                    Scopes,
+                    &quot;user&quot;,
+                    CancellationToken.None,
+                    new FileDataStore(credPath, true)).Result;
+
+                // Create Google Docs API service.
+                var service = new DocsService(new BaseClientService.Initializer()
+                {
+                    HttpClientInitializer = credential,
+                    ApplicationName = googleDoc.ApplicationNameSetting,
+                });
+
+                var serviceDrive = new DriveService(
+                new BaseClientService.Initializer()
+                {
+                    HttpClientInitializer = credential,
+                    ApplicationName = googleDoc.ApplicationNameSetting,
+                });
+
+                // rest codes...
+</code></pre>
+<p>That is it!</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Helena-Li.github.io/post/reactcreateelement-type-is-invalid">
+                  <h3 class="post-title">
+                    React.createElement: type is invalid 
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>

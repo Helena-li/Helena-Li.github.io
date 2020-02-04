@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ASP.NET core MVC | Web development</title>
+<title>React.createElement: type is invalid  | Web development</title>
 <meta name="description" content="">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -91,58 +91,73 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: ASP.NET core MVC</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://Helena-Li.github.io/post/integration-with-google-docs-to-export-documents-in-aspnet-core">
-                  <h2 class="post-title">Integration with Google Docs to export documents in ASP.NET core </h2>
-                </a>
-                <div class="post-date">
-                  2020-01-03
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://Helena-Li.github.io/post/sign-in-with-google-api-getexternallogininfoasync-return-null">
-                  <h2 class="post-title">Sign in with Google+ API - GetExternalLoginInfoAsync return null</h2>
-                </a>
-                <div class="post-date">
-                  2019-12-23
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://Helena-Li.github.io/post/tag-helpers-not-creating-proper-url">
-                  <h2 class="post-title">Tag helpers not creating proper URL</h2>
-                </a>
-                <div class="post-date">
-                  2019-12-07
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
+          <div class="post-detail">
+            <h2 class="post-title">React.createElement: type is invalid </h2>
+            <div class="post-date">2020-02-04</div>
+            
+            <div class="post-content">
+              <h1 id="-expected-a-string-or-a-classfunction-but-got-object">-- expected a string or a class/function but got object</h1>
+<p>Use react to implement a simple render using List like this:</p>
+<pre><code class="language-react">import SuggestionCard from './FakeData';
 
-          <div class="pagination-container">
-  
-  
-</div>
+&lt;List
+  loading={this.props.isLoading}
+  itemLayout=&quot;vertical&quot;
+  grid={{ column: 1 }}
+  size=&quot;large&quot;
+  dataSource={talentSuggestions}
+  renderItem={item =&gt; (
+    &lt;List.Item key={item.id}&gt;
+      &lt;SuggestionCard SuggestionData={item} ContactTalent={this.clickContack}/&gt;
+    &lt;/List.Item&gt;
+              )}
+/&gt;
+</code></pre>
+<pre><code class="language-react">export default class SuggestionCard extends Component {
+render() {
+    const suggestionItem = this.props.SuggestionData;
+
+    return (
+      &lt;Card 
+        title=&quot;HI title&quot;&gt;
+        &lt;Card.Meta
+          title=&quot;Skills&quot;
+          description={
+            &lt;div&gt;
+              &lt;Tag&gt;skill 1&lt;/Tag&gt;
+              &lt;Tag&gt;skill 2&lt;/Tag&gt;
+              &lt;Tag&gt;skill 3&lt;/Tag&gt;
+            &lt;/div&gt;
+          }
+        /&gt;
+      &lt;/Card&gt;
+    );
+  }
+}
+</code></pre>
+<p>But got a error message of : React.createElement: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: object.</p>
+<p>I checked it again and again, and then found that the error occur because of the wrong import path! I should import this component from</p>
+<pre><code class="language-react">import SuggestionCard from './SuggestionCard';
+</code></pre>
+<p>So this bug was fixed. How ridiculous~~~</p>
+<p>Anyway, happy development. Haha~~~~</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Helena-Li.github.io/post/two-ways-to-use-automapper-in-net-core">
+                  <h3 class="post-title">
+                    Ways of using AutoMapper in .NET core
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
 
         </div>
       </div>

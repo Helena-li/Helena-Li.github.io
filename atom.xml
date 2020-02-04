@@ -2,13 +2,145 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Helena-Li.github.io</id>
     <title>Web development</title>
-    <updated>2020-02-01T04:12:20.403Z</updated>
+    <updated>2020-02-04T04:15:49.984Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Helena-Li.github.io"/>
     <link rel="self" href="https://Helena-Li.github.io/atom.xml"/>
     <logo>https://Helena-Li.github.io/images/avatar.png</logo>
     <icon>https://Helena-Li.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Web development</rights>
+    <entry>
+        <title type="html"><![CDATA[Use IOptions for intergration of Google Docs]]></title>
+        <id>https://Helena-Li.github.io/post/use-ioptions-for-intergration-of-google-docs</id>
+        <link href="https://Helena-Li.github.io/post/use-ioptions-for-intergration-of-google-docs">
+        </link>
+        <updated>2020-02-04T13:44:04.000Z</updated>
+        <content type="html"><![CDATA[<p>In the integration of Google Docs, I used a credential file to provide client Id and keys. However, sensitive data should not be used directly in codes. This blog is to use IOptions in ASP.Net to achieve this.</p>
+<p>There are 4 steps:</p>
+<ol>
+<li>create a class to store sensitive data</li>
+<li>set up appsettings.json</li>
+<li>register in startup.cs</li>
+<li>use the sensitive data</li>
+</ol>
+<h3 id="1-create-a-class-to-store-sensitive-data">1. create a class to store sensitive data</h3>
+<pre><code class="language-c#">public class GoogleDocSettings
+    {
+        public string ApplicationNameSetting { get; set; }
+        public string TemplateDocId { get; set; }
+        public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
+    }
+</code></pre>
+<h3 id="2-set-up-appsettingsjson">2. set up appsettings.json</h3>
+<pre><code class="language-c#">&quot;googleDoc&quot;: {
+    &quot;applicationNameSetting&quot;: &quot;Google Docs API&quot;,
+    &quot;templateDocId&quot;: &quot;188888888888888************80c&quot;,
+    &quot;clientId&quot;: &quot;597*******1-g*************q.apps.googleusercontent.com&quot;,
+    &quot;clientSecret&quot;: &quot;l**********P&quot;
+  }
+
+</code></pre>
+<h3 id="3-register-in-startupcs">3. register in startup.cs</h3>
+<pre><code class="language-c#">services.Configure&lt;GoogleDocSettings&gt;(options =&gt;
+            Configuration.GetSection(&quot;googleDoc&quot;).Bind(options));
+
+</code></pre>
+<h3 id="4-use-the-sensitive-data">4. use the sensitive data</h3>
+<pre><code class="language-c#">private readonly GoogleDocSettings googleDoc;
+
+public GoogleService(
+                      IOptions&lt;GoogleDocSettings&gt; googleOptions)
+{
+    this.googleDoc = googleOptions.Value;
+}
+
+</code></pre>
+<pre><code class="language-c#">public async Task&lt;bool&gt; UseGoogleDocs(DemoViewModel model)
+        {
+            try
+            {
+                UserCredential credential;
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    new ClientSecrets { ClientId = googleDoc.ClientId, 
+                    ClientSecret = googleDoc.ClientSecret },
+                    Scopes,
+                    &quot;user&quot;,
+                    CancellationToken.None,
+                    new FileDataStore(credPath, true)).Result;
+
+                // Create Google Docs API service.
+                var service = new DocsService(new BaseClientService.Initializer()
+                {
+                    HttpClientInitializer = credential,
+                    ApplicationName = googleDoc.ApplicationNameSetting,
+                });
+
+                var serviceDrive = new DriveService(
+                new BaseClientService.Initializer()
+                {
+                    HttpClientInitializer = credential,
+                    ApplicationName = googleDoc.ApplicationNameSetting,
+                });
+
+                // rest codes...
+</code></pre>
+<p>That is it!</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[React.createElement: type is invalid ]]></title>
+        <id>https://Helena-Li.github.io/post/reactcreateelement-type-is-invalid</id>
+        <link href="https://Helena-Li.github.io/post/reactcreateelement-type-is-invalid">
+        </link>
+        <updated>2020-02-04T07:44:23.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="-expected-a-string-or-a-classfunction-but-got-object">-- expected a string or a class/function but got object</h1>
+<p>Use react to implement a simple render using List like this:</p>
+<pre><code class="language-react">import SuggestionCard from './FakeData';
+
+&lt;List
+  loading={this.props.isLoading}
+  itemLayout=&quot;vertical&quot;
+  grid={{ column: 1 }}
+  size=&quot;large&quot;
+  dataSource={talentSuggestions}
+  renderItem={item =&gt; (
+    &lt;List.Item key={item.id}&gt;
+      &lt;SuggestionCard SuggestionData={item} ContactTalent={this.clickContack}/&gt;
+    &lt;/List.Item&gt;
+              )}
+/&gt;
+</code></pre>
+<pre><code class="language-react">export default class SuggestionCard extends Component {
+render() {
+    const suggestionItem = this.props.SuggestionData;
+
+    return (
+      &lt;Card 
+        title=&quot;HI title&quot;&gt;
+        &lt;Card.Meta
+          title=&quot;Skills&quot;
+          description={
+            &lt;div&gt;
+              &lt;Tag&gt;skill 1&lt;/Tag&gt;
+              &lt;Tag&gt;skill 2&lt;/Tag&gt;
+              &lt;Tag&gt;skill 3&lt;/Tag&gt;
+            &lt;/div&gt;
+          }
+        /&gt;
+      &lt;/Card&gt;
+    );
+  }
+}
+</code></pre>
+<p>But got a error message of : React.createElement: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: object.</p>
+<p>I checked it again and again, and then found that the error occur because of the wrong import path! I should import this component from</p>
+<pre><code class="language-react">import SuggestionCard from './SuggestionCard';
+</code></pre>
+<p>So this bug was fixed. How ridiculous~~~</p>
+<p>Anyway, happy development. Haha~~~~</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Ways of using AutoMapper in .NET core]]></title>
         <id>https://Helena-Li.github.io/post/two-ways-to-use-automapper-in-net-core</id>
