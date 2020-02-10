@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Helena-Li.github.io</id>
     <title>Web development</title>
-    <updated>2020-02-10T09:34:08.371Z</updated>
+    <updated>2020-02-10T09:42:10.537Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Helena-Li.github.io"/>
     <link rel="self" href="https://Helena-Li.github.io/atom.xml"/>
@@ -14,7 +14,7 @@
         <id>https://Helena-Li.github.io/post/use-ioptions-for-intergration-of-google-docs</id>
         <link href="https://Helena-Li.github.io/post/use-ioptions-for-intergration-of-google-docs">
         </link>
-        <updated>2020-02-04T13:44:04.000Z</updated>
+        <updated>2020-02-04T23:44:04.000Z</updated>
         <content type="html"><![CDATA[<p>In the integration of Google Docs, I used a credential file to provide client Id and keys. However, sensitive data should not be used directly in codes. This blog is to use IOptions in ASP.Net to achieve this.</p>
 <p>There are 4 steps:</p>
 <ol>
@@ -93,7 +93,7 @@ public GoogleService(
         <id>https://Helena-Li.github.io/post/reactcreateelement-type-is-invalid</id>
         <link href="https://Helena-Li.github.io/post/reactcreateelement-type-is-invalid">
         </link>
-        <updated>2020-02-04T07:44:23.000Z</updated>
+        <updated>2020-02-04T12:44:23.000Z</updated>
         <content type="html"><![CDATA[<h1 id="-expected-a-string-or-a-classfunction-but-got-object">-- expected a string or a class/function but got object</h1>
 <p>Use react to implement a simple render using List like this:</p>
 <pre><code class="language-react">import SuggestionCard from './FakeData';
@@ -146,7 +146,7 @@ render() {
         <id>https://Helena-Li.github.io/post/two-ways-to-use-automapper-in-net-core</id>
         <link href="https://Helena-Li.github.io/post/two-ways-to-use-automapper-in-net-core">
         </link>
-        <updated>2020-01-24T23:29:54.000Z</updated>
+        <updated>2020-01-25T04:29:54.000Z</updated>
         <content type="html"><![CDATA[<p>Previously, I use this way to map an entity to a data transfer object(DTO):</p>
 <pre><code class="language-c#">public class Company
     {
@@ -352,7 +352,7 @@ public async Task&lt;ActionResult&lt;IEnumerable&lt;EmpDto&gt;&gt;&gt; GetCompan
         <id>https://Helena-Li.github.io/post/integration-with-google-docs-to-export-documents-in-aspnet-core</id>
         <link href="https://Helena-Li.github.io/post/integration-with-google-docs-to-export-documents-in-aspnet-core">
         </link>
-        <updated>2020-01-03T03:06:23.000Z</updated>
+        <updated>2020-01-03T08:06:23.000Z</updated>
         <content type="html"><![CDATA[<!-- more -->
 <p>APIs provided by Google Docs include creating new document, getting a document and  updating a document. However, the function is limited. For example, people can't copy paragraphs; insert text or update styles need the index of the text in Google docs.</p>
 <p>Because there are not many example codes for ASP.NET core with C#, I write this article.</p>
@@ -686,7 +686,7 @@ BatchUpdateDocumentResponse response = service.Documents
         <id>https://Helena-Li.github.io/post/sign-in-with-google-api-getexternallogininfoasync-return-null</id>
         <link href="https://Helena-Li.github.io/post/sign-in-with-google-api-getexternallogininfoasync-return-null">
         </link>
-        <updated>2019-12-23T10:00:30.000Z</updated>
+        <updated>2019-12-23T15:00:30.000Z</updated>
         <content type="html"><![CDATA[<p>When I try to sign in with Google authentication, I encounter an issue that I can't receive information by using signInManager.GetExternalLoginInfoAsync(). This is because Google plus is shutting down. Here I give the overall codes and sources for google authentication. I used ASP.NET core 2.2.</p>
 <p>The process of create a Google API console project is :</p>
 <ol>
