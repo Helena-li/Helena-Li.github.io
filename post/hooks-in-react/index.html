@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Use IOptions for intergration of Google Docs | Web development</title>
+<title>Hooks in React | Web development</title>
 <meta name="description" content="">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -98,92 +98,67 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Use IOptions for intergration of Google Docs</h2>
-            <div class="post-date">2020-02-05</div>
+            <h2 class="post-title">Hooks in React</h2>
+            <div class="post-date">2020-03-13</div>
             
             <div class="post-content">
-              <p>In the integration of Google Docs, I used a credential file to provide client Id and keys. However, sensitive data should not be used directly in codes. This blog is to use IOptions in ASP.Net to achieve this.</p>
-<p>There are 4 steps:</p>
+              <h3 id="why-need-to-use-hooks">Why need to use hooks?</h3>
+<p>There are 3 drawbacks by using class component in React:</p>
 <ol>
-<li>create a class to store sensitive data</li>
-<li>set up appsettings.json</li>
-<li>register in startup.cs</li>
-<li>use the sensitive data</li>
+<li>Big component is hard to split or restructure</li>
+<li>Logic is scattered in methods which can lead to redundant logic.</li>
+<li>Coding model is complicated, such as render, props, etc.</li>
 </ol>
-<h3 id="1-create-a-class-to-store-sensitive-data">1. create a class to store sensitive data</h3>
-<pre><code class="language-c#">public class GoogleDocSettings
-    {
-        public string ApplicationNameSetting { get; set; }
-        public string TemplateDocId { get; set; }
-        public string ClientId { get; set; }
-        public string ClientSecret { get; set; }
+<p>To simplify coding in React, Hooks is designed, used in pure methods, which don't need class to complete a component. Notice, Hooks don't work inside classes!</p>
+<h3 id="build-in-hooks">Build-in Hooks</h3>
+<p>There are 4 commonly used hooks: useState(), useContext(), useReducer() and useEffect().</p>
+<p>useState() is used when you need to manipulate state in a function.</p>
+<pre><code class="language-react">import React, {useState} from &quot;react&quot;
+
+export default function Fruit(){
+    //declare hookks, initial value for fruit is banana, setFruit is used to handle changes.
+    const [fruit, setFruit]=useState(&quot;banana&quot;);
+    
+    function handleChange(){
+        return setFruit(&quot;orange&quot;);
     }
-</code></pre>
-<h3 id="2-set-up-appsettingsjson">2. set up appsettings.json</h3>
-<pre><code class="language-c#">&quot;googleDoc&quot;: {
-    &quot;applicationNameSetting&quot;: &quot;Google Docs API&quot;,
-    &quot;templateDocId&quot;: &quot;188888888888888************80c&quot;,
-    &quot;clientId&quot;: &quot;597*******1-g*************q.apps.googleusercontent.com&quot;,
-    &quot;clientSecret&quot;: &quot;l**********P&quot;
-  }
-
-</code></pre>
-<h3 id="3-register-in-startupcs">3. register in startup.cs</h3>
-<pre><code class="language-c#">services.Configure&lt;GoogleDocSettings&gt;(options =&gt;
-            Configuration.GetSection(&quot;googleDoc&quot;).Bind(options));
-
-</code></pre>
-<h3 id="4-use-the-sensitive-data">4. use the sensitive data</h3>
-<pre><code class="language-c#">private readonly GoogleDocSettings googleDoc;
-
-public GoogleService(
-                      IOptions&lt;GoogleDocSettings&gt; googleOptions)
-{
-    this.googleDoc = googleOptions.Value;
+    return &lt;button onclick={handleChange}&gt;{fruit}&lt;/button&gt;
+    // can directly use fruit
 }
-
 </code></pre>
-<pre><code class="language-c#">public async Task&lt;bool&gt; UseGoogleDocs(DemoViewModel model)
-        {
-            try
-            {
-                UserCredential credential;
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    new ClientSecrets { ClientId = googleDoc.ClientId, 
-                    ClientSecret = googleDoc.ClientSecret },
-                    Scopes,
-                    &quot;user&quot;,
-                    CancellationToken.None,
-                    new FileDataStore(credPath, true)).Result;
-
-                // Create Google Docs API service.
-                var service = new DocsService(new BaseClientService.Initializer()
-                {
-                    HttpClientInitializer = credential,
-                    ApplicationName = googleDoc.ApplicationNameSetting,
-                });
-
-                var serviceDrive = new DriveService(
-                new BaseClientService.Initializer()
-                {
-                    HttpClientInitializer = credential,
-                    ApplicationName = googleDoc.ApplicationNameSetting,
-                });
-
-                // rest codes...
+<p>useEffect() lets you perform side effects. general ways to use it is to request data. Effects are run after updating the DOM. Unlike componentDidMount, effects don't block the browser from updating the screen. Major effects don't need to happen synchronously, so it makes the app more responsive.</p>
+<pre><code class="language-react">function User(Id){
+    const [loading, setLoading]=useState(true);
+    const [user, setUser]=useState({});
+    
+    useEffect(()=&gt;{
+        setLoading(true);
+        fetch(`https://sample/${Id}`)
+        .then(response=&gt;response.json())
+        .then(data=&gt;{
+            setUser(data);
+            setLoading(false);
+        });
+    },[Id]);
+    if(loading===true){
+        return &lt;p&gt;Loading...&lt;/p&gt;
+    }
+    
+    return(
+        &lt;div&gt;
+          &lt;p&gt; User name: {user.Name}&lt;/p&gt;
+        &lt;/div&gt;
+    )
+}
 </code></pre>
-<p>That is it!</p>
+<p>Notice: for needs of executing effect each time there is a update, can delete the second parameter in useEffect(); for needs of render once, can make the second parameter as [], so there is no change for a [], it will only executed once.</p>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://Helena-Li.github.io/tag/JqvLMtE2X" class="tag">
-                    integration
-                  </a>
-                
-                  <a href="https://Helena-Li.github.io/tag/D6EtV_gkA" class="tag">
-                    ASP.NET core MVC
+                  <a href="https://Helena-Li.github.io/tag/PPScSOXUk" class="tag">
+                    React
                   </a>
                 
               </div>
@@ -191,9 +166,9 @@ public GoogleService(
             
               <div class="next-post">
                 <div class="next">Next</div>
-                <a href="https://Helena-Li.github.io/post/reactcreateelement-type-is-invalid">
+                <a href="https://Helena-Li.github.io/post/use-ioptions-for-intergration-of-google-docs">
                   <h3 class="post-title">
-                    React.createElement: type is invalid 
+                    Use IOptions for intergration of Google Docs
                   </h3>
                 </a>
               </div>
