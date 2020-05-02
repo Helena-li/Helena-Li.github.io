@@ -2,13 +2,134 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Helena-Li.github.io</id>
     <title>Web development</title>
-    <updated>2020-03-12T04:42:25.545Z</updated>
+    <updated>2020-05-02T04:36:56.906Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Helena-Li.github.io"/>
     <link rel="self" href="https://Helena-Li.github.io/atom.xml"/>
     <logo>https://Helena-Li.github.io/images/avatar.png</logo>
     <icon>https://Helena-Li.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Web development</rights>
+    <entry>
+        <title type="html"><![CDATA[Use SendGrid to send email in ASP.NET core]]></title>
+        <id>https://Helena-Li.github.io/post/use-sendgrid-to-send-email-in-aspnet-core</id>
+        <link href="https://Helena-Li.github.io/post/use-sendgrid-to-send-email-in-aspnet-core">
+        </link>
+        <updated>2020-05-02T09:40:48.000Z</updated>
+        <content type="html"><![CDATA[<p>When registered in a website, we usually need to confirm the register. This time I used SendGrid to send the confirmation via templates in a ASP.NET core project.</p>
+<h3 id="easy-way-to-send-a-simple-email">Easy way to send a simple email</h3>
+<p>Before using the SendGrid service, we need the following preparations:</p>
+<ol>
+<li>Have an account in SendGrid.</li>
+<li>Get the API key</li>
+<li>Set a template</li>
+</ol>
+<p>Notice, the API key just show you once, keep it properly.</p>
+<p>The template I used is dynamic template which can replace some words in the template. It's:</p>
+<pre><code class="language-html">  &lt;html&gt;
+    &lt;head&gt;
+      &lt;title&gt;&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Hello {{name}},
+        &lt;br /&gt;&lt;br/&gt;
+        registered successful!
+        &lt;br /&gt;&lt;br/&gt;
+        Please confirm your email address using this link:
+        &lt;a href=&quot;{{redirect}}&quot;&gt; Comfirm Your Account &lt;/a&gt;
+        &lt;br /&gt;&lt;br/&gt;
+        This link will expired in 7 days.
+    &lt;/body&gt;
+  &lt;/html&gt;
+</code></pre>
+<p>You can see, the &quot;name&quot;, and &quot;redirect&quot; can be replaced when you set your codes in C# like this:</p>
+<pre><code class="language-c#">public class TemplateEmailData
+    {
+        [JsonProperty(&quot;subject&quot;)]
+        public string Subject { get; set; }
+        [JsonProperty(&quot;name&quot;)]
+        public string Name { get; set; }
+        [JsonProperty(&quot;redirect&quot;)]
+    }
+</code></pre>
+<p>So the SendGrid can handle the request.</p>
+<p>Before writing codes, we need to install SendGrid  package. In package manager console, use command:</p>
+<pre><code>PM&gt; Install-Package SendGrid
+</code></pre>
+<p>Then, the codes are:</p>
+<pre><code class="language-c#">[HttpPost]
+[AllowAnonymous]
+public async Task&lt;IActionResult&gt; Register(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+               // other codes...
+
+                    var dynamicTemplateData = new TemplateEmailData
+                    {
+                        Subject = &quot;send grid dynamic&quot;,
+                        Name = &quot;Linda&quot;,
+                        RedirectUrl = 
+                        &quot;https://localhost:44356/account/&quot;
+                    };
+                    emailService.SendEmail(dynamicTemplateData);
+                // other codes... 
+            }
+            return View(model);
+        }   
+</code></pre>
+<pre><code class="language-c#"> public async void SendEmail(TemplateEmailData templateEmailData)
+{
+            try
+            {
+                // your own SendGridApiKey
+                var client = new SendGridClient(SendGridApiKey);
+                var msg = new SendGridMessage();
+                msg.SetFrom(new EmailAddress(&quot;test@gmail.com&quot;, &quot;t&quot;));
+                msg.AddTo(new EmailAddress(&quot;test@gmail.com&quot;, &quot;Linda&quot;));
+                msg.SetTemplateId(TemplateID);
+				// You own TemplateID
+                msg.SetTemplateData(templateEmailData);
+                var response = await client.SendEmailAsync(msg);
+            }
+            catch (Exception e)
+            {
+                throw;
+}
+</code></pre>
+<p>The interesting thing is that we don't need a credential for this service, just need an API key and template ID.</p>
+<h3 id="iterations-for-template">Iterations for template</h3>
+<p>When we need to dynamically generate iterations from a list or array, the template is looks like this：</p>
+<pre><code class="language-http">&lt;ol&gt;
+        {{#each location}}
+        	&lt;li&gt;You ordered: {{this.city}} on: {{this.country}}&lt;/li&gt;
+        {{/each}}
+&lt;/ol&gt;
+</code></pre>
+<p>And the codes constantly changed to:</p>
+<pre><code class="language-c#">public class TemplateEmailData
+    {
+        [JsonProperty(&quot;subject&quot;)]
+        public string Subject { get; set; }
+        [JsonProperty(&quot;name&quot;)]
+        public string Name { get; set; }
+        [JsonProperty(&quot;redirect&quot;)]
+        public string RedirectUrl { get; set; }
+        [JsonProperty(&quot;location&quot;)]
+        public List&lt;Location&gt; Locations { get; set; }
+    }
+    public class Location
+    {
+        [JsonProperty(&quot;city&quot;)]
+        public string City { get; set; }
+        [JsonProperty(&quot;country&quot;)]
+        public string Country { get; set; }
+    }
+</code></pre>
+<h3 id="source">Source</h3>
+<p>https://sendgrid.com/docs/for-developers/sending-email/using-handlebars/#iterations</p>
+<p>https://github.com/sendgrid/sendgrid-csharp</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Hooks in React]]></title>
         <id>https://Helena-Li.github.io/post/hooks-in-react</id>
