@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Helena-Li.github.io/favicon.ico?v=1588394644605">
+<link rel="shortcut icon" href="https://Helena-Li.github.io/favicon.ico?v=1588394747074">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://Helena-Li.github.io/styles/main.css">
 
@@ -36,7 +36,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Helena-Li.github.io">
-        <img src="https://Helena-Li.github.io/images/avatar.png?v=1588394644605" class="site-logo">
+        <img src="https://Helena-Li.github.io/images/avatar.png?v=1588394747074" class="site-logo">
         <h1 class="site-title">Web development</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -186,11 +186,26 @@ public async Task&lt;IActionResult&gt; Register(RegisterViewModel model)
 <p>The interesting thing is that we don't need a credential for this service, just need an API key and template ID.</p>
 <h3 id="iterations-for-template">Iterations for template</h3>
 <p>When we need to dynamically generate iterations from a list or array, the template is looks like this：</p>
-<pre><code class="language-html">&lt;ol&gt;
+<pre><code class="language-html">  &lt;html&gt;
+    &lt;head&gt;
+      &lt;title&gt;&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Hello {{name}},
+        &lt;br /&gt;&lt;br/&gt;
+        registered successful!
+        &lt;br /&gt;&lt;br/&gt;
+        &lt;ol&gt;
         {{#each location}}
         	&lt;li&gt;You ordered: {{this.city}} on: {{this.country}}&lt;/li&gt;
         {{/each}}
-&lt;/ol&gt;
+		&lt;/ol&gt;
+        Please confirm your email address using this link:
+        &lt;a href=&quot;{{redirect}}&quot;&gt; Comfirm Your Account &lt;/a&gt;
+        &lt;br /&gt;&lt;br/&gt;
+        This link will expired in 7 days.
+    &lt;/body&gt;
+  &lt;/html&gt;
 </code></pre>
 <p>And the codes constantly changed to:</p>
 <pre><code class="language-c#">public class TemplateEmailData
