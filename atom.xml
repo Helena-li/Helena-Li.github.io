@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Helena-Li.github.io</id>
     <title>Web development</title>
-    <updated>2020-05-02T04:40:21.360Z</updated>
+    <updated>2020-05-02T04:44:08.830Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Helena-Li.github.io"/>
     <link rel="self" href="https://Helena-Li.github.io/atom.xml"/>
@@ -14,7 +14,7 @@
         <id>https://Helena-Li.github.io/post/use-sendgrid-to-send-email-in-aspnet-core</id>
         <link href="https://Helena-Li.github.io/post/use-sendgrid-to-send-email-in-aspnet-core">
         </link>
-        <updated>2020-05-02T17:40:48.000Z</updated>
+        <updated>2020-05-02T21:40:48.000Z</updated>
         <content type="html"><![CDATA[<p>When registered in a website, we usually need to confirm the register. This time I used SendGrid to send the confirmation via templates in a ASP.NET core project.</p>
 <h3 id="easy-way-to-send-a-simple-email">Easy way to send a simple email</h3>
 <p>Before using the SendGrid service, we need the following preparations:</p>
@@ -99,7 +99,7 @@ public async Task&lt;IActionResult&gt; Register(RegisterViewModel model)
 <p>The interesting thing is that we don't need a credential for this service, just need an API key and template ID.</p>
 <h3 id="iterations-for-template">Iterations for template</h3>
 <p>When we need to dynamically generate iterations from a list or array, the template is looks like this：</p>
-<pre><code class="language-http">&lt;ol&gt;
+<pre><code class="language-html">&lt;ol&gt;
         {{#each location}}
         	&lt;li&gt;You ordered: {{this.city}} on: {{this.country}}&lt;/li&gt;
         {{/each}}
