@@ -2,13 +2,65 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Helena-Li.github.io</id>
     <title>Web development</title>
-    <updated>2020-05-02T05:02:53.843Z</updated>
+    <updated>2020-06-21T23:33:22.725Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Helena-Li.github.io"/>
     <link rel="self" href="https://Helena-Li.github.io/atom.xml"/>
     <logo>https://Helena-Li.github.io/images/avatar.png</logo>
     <icon>https://Helena-Li.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Web development</rights>
+    <entry>
+        <title type="html"><![CDATA[The difference between a function component and a class component to trigger children form changes in Ant design ]]></title>
+        <id>https://Helena-Li.github.io/post/the-difference-between-a-function-component-and-a-class-component-to-trigger-children-form-changes-in-ant-design</id>
+        <link href="https://Helena-Li.github.io/post/the-difference-between-a-function-component-and-a-class-component-to-trigger-children-form-changes-in-ant-design">
+        </link>
+        <updated>2020-06-22T11:27:57.000Z</updated>
+        <content type="html"><![CDATA[<p>The difference between a function component and a class component to trigger children form changes in Ant design</p>
+<p>Sometimes we need to trigger the changes in a children form, then the parent component can do something in consistent. For example, put a form in a drawer to CRUD some information. Also, you want to monitor the items validation out of the form.</p>
+<p>To transfer the state, we need to use ref to monitor the changes. However, the way of using ref is different for a class component from a function component when using hook. Here we will discuss the both way in React / Antd.</p>
+<p>The example we used here is to monitor the items' validation status for two children forms. the whole structure is looks like this:</p>
+<figure data-type="image" tabindex="1"><img src="https://Helena-Li.github.io/post-images/1592782098455.PNG" alt=""></figure>
+<p>There parent component is a card, and there're two forms inside, left referee details and right questions. When we submit the page, we hope to get the status of the both children forms.</p>
+<h3 id="example-codes-for-children-parts">Example codes for children parts</h3>
+<p>In this case we use class component for the left side, and use function component for the right one.</p>
+<p><img src="https://Helena-Li.github.io/post-images/1592782356077.PNG" alt=""><br>
+<img src="https://Helena-Li.github.io/post-images/1592782363187.PNG" alt=""></p>
+<p>It could be seen, for the class children component, we don't need to do anything in it to get the status, all the efforts are outside it. In term of the function one, we need to use useImperativeHandle and forwardRef.</p>
+<pre><code>useImperativeHandle` customizes the instance value that is exposed to parent components when using `ref
+</code></pre>
+<h3 id="example-codes-for-the-parent-part">Example codes for the parent part</h3>
+<p>For the parent component, we need to generate the both ref and use them, the codes are looks like this:</p>
+<figure data-type="image" tabindex="2"><img src="https://Helena-Li.github.io/post-images/1592782327887.PNG" alt=""></figure>
+<p>To ref the form, we use wrappedComponentRef to get the instance.</p>
+<p>Then it is easy to get the validation status for both forms through the ref instances. The codes are:</p>
+<pre><code class="language-react"> const validateLeft=()=&gt;{
+    const {form} =formRef.props
+    let result = true
+    form.validateFields((errors, values) =&gt; {
+      if (errors) {
+        result=false;
+      }
+    });
+    return result
+  }
+
+  const validateRight=()=&gt;{
+    let result = true
+    questionFormRef.validateFields((errors, values) =&gt; {
+      if (errors) {
+        result=false;
+      }
+    });
+    return result
+  }
+
+</code></pre>
+<p>You might notice, for the class component, we get the form instance by using <code>const {form} =formRef.props</code> . In terms of the hook one, because we send back the &quot;form&quot; in the props, we can use questionFormRef instance directly.</p>
+<h3 id="source">Source</h3>
+<p>https://3x.ant.design/components/form/</p>
+<p>https://reactjs.org/docs/hooks-reference.html</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Use SendGrid to send email in ASP.NET core]]></title>
         <id>https://Helena-Li.github.io/post/use-sendgrid-to-send-email-in-aspnet-core</id>

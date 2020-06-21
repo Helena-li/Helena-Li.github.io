@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Hooks in React | Web development</title>
+<title>The difference between a function component and a class component to trigger children form changes in Ant design  | Web development</title>
 <meta name="description" content="">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -98,60 +98,54 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Hooks in React</h2>
-            <div class="post-date">2020-03-13</div>
+            <h2 class="post-title">The difference between a function component and a class component to trigger children form changes in Ant design </h2>
+            <div class="post-date">2020-06-22</div>
             
             <div class="post-content">
-              <h3 id="why-need-to-use-hooks">Why need to use hooks?</h3>
-<p>There are 3 drawbacks by using class component in React:</p>
-<ol>
-<li>Big component is hard to split or restructure</li>
-<li>Logic is scattered in methods which can lead to redundant logic.</li>
-<li>Coding model is complicated, such as render, props, etc.</li>
-</ol>
-<p>To simplify coding in React, Hooks is designed, used in pure methods, which don't need class to complete a component. Notice, Hooks don't work inside classes!</p>
-<h3 id="build-in-hooks">Build-in Hooks</h3>
-<p>There are 4 commonly used hooks: useState(), useContext(), useReducer() and useEffect().</p>
-<p>useState() is used when you need to manipulate state in a function.</p>
-<pre><code class="language-react">import React, {useState} from &quot;react&quot;
+              <p>The difference between a function component and a class component to trigger children form changes in Ant design</p>
+<p>Sometimes we need to trigger the changes in a children form, then the parent component can do something in consistent. For example, put a form in a drawer to CRUD some information. Also, you want to monitor the items validation out of the form.</p>
+<p>To transfer the state, we need to use ref to monitor the changes. However, the way of using ref is different for a class component from a function component when using hook. Here we will discuss the both way in React / Antd.</p>
+<p>The example we used here is to monitor the items' validation status for two children forms. the whole structure is looks like this:</p>
+<figure data-type="image" tabindex="1"><img src="https://Helena-Li.github.io/post-images/1592782098455.PNG" alt=""></figure>
+<p>There parent component is a card, and there're two forms inside, left referee details and right questions. When we submit the page, we hope to get the status of the both children forms.</p>
+<h3 id="example-codes-for-children-parts">Example codes for children parts</h3>
+<p>In this case we use class component for the left side, and use function component for the right one.</p>
+<p><img src="https://Helena-Li.github.io/post-images/1592782356077.PNG" alt=""><br>
+<img src="https://Helena-Li.github.io/post-images/1592782363187.PNG" alt=""></p>
+<p>It could be seen, for the class children component, we don't need to do anything in it to get the status, all the efforts are outside it. In term of the function one, we need to use useImperativeHandle and forwardRef.</p>
+<pre><code>useImperativeHandle` customizes the instance value that is exposed to parent components when using `ref
+</code></pre>
+<h3 id="example-codes-for-the-parent-part">Example codes for the parent part</h3>
+<p>For the parent component, we need to generate the both ref and use them, the codes are looks like this:</p>
+<figure data-type="image" tabindex="2"><img src="https://Helena-Li.github.io/post-images/1592782327887.PNG" alt=""></figure>
+<p>To ref the form, we use wrappedComponentRef to get the instance.</p>
+<p>Then it is easy to get the validation status for both forms through the ref instances. The codes are:</p>
+<pre><code class="language-react"> const validateLeft=()=&gt;{
+    const {form} =formRef.props
+    let result = true
+    form.validateFields((errors, values) =&gt; {
+      if (errors) {
+        result=false;
+      }
+    });
+    return result
+  }
 
-export default function Fruit(){
-    //declare hookks, initial value for fruit is banana, setFruit is used to handle changes.
-    const [fruit, setFruit]=useState(&quot;banana&quot;);
-    
-    function handleChange(){
-        return setFruit(&quot;orange&quot;);
-    }
-    return &lt;button onclick={handleChange}&gt;{fruit}&lt;/button&gt;
-    // can directly use fruit
-}
+  const validateRight=()=&gt;{
+    let result = true
+    questionFormRef.validateFields((errors, values) =&gt; {
+      if (errors) {
+        result=false;
+      }
+    });
+    return result
+  }
+
 </code></pre>
-<p>useEffect() lets you perform side effects. general ways to use it is to request data. Effects are run after updating the DOM. Unlike componentDidMount, effects don't block the browser from updating the screen. Major effects don't need to happen synchronously, so it makes the app more responsive.</p>
-<pre><code class="language-react">function User(Id){
-    const [loading, setLoading]=useState(true);
-    const [user, setUser]=useState({});
-    
-    useEffect(()=&gt;{
-        setLoading(true);
-        fetch(`https://sample/${Id}`)
-        .then(response=&gt;response.json())
-        .then(data=&gt;{
-            setUser(data);
-            setLoading(false);
-        });
-    },[Id]);
-    if(loading===true){
-        return &lt;p&gt;Loading...&lt;/p&gt;
-    }
-    
-    return(
-        &lt;div&gt;
-          &lt;p&gt; User name: {user.Name}&lt;/p&gt;
-        &lt;/div&gt;
-    )
-}
-</code></pre>
-<p>Notice: for needs of executing effect each time there is a update, can delete the second parameter in useEffect(); for needs of render once, can make the second parameter as [], so there is no change for a [], it will only executed once.</p>
+<p>You might notice, for the class component, we get the form instance by using <code>const {form} =formRef.props</code> . In terms of the hook one, because we send back the &quot;form&quot; in the props, we can use questionFormRef instance directly.</p>
+<h3 id="source">Source</h3>
+<p>https://3x.ant.design/components/form/</p>
+<p>https://reactjs.org/docs/hooks-reference.html</p>
 
             </div>
             
@@ -166,9 +160,9 @@ export default function Fruit(){
             
               <div class="next-post">
                 <div class="next">Next</div>
-                <a href="https://Helena-Li.github.io/post/use-ioptions-for-intergration-of-google-docs">
+                <a href="https://Helena-Li.github.io/post/use-sendgrid-to-send-email-in-aspnet-core">
                   <h3 class="post-title">
-                    Use IOptions for intergration of Google Docs
+                    Use SendGrid to send email in ASP.NET core
                   </h3>
                 </a>
               </div>
