@@ -2,13 +2,13 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Helena-Li.github.io</id>
     <title>Web development</title>
-    <updated>2020-06-21T23:33:51.974Z</updated>
+    <updated>2021-06-09T23:05:48.332Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Helena-Li.github.io"/>
     <link rel="self" href="https://Helena-Li.github.io/atom.xml"/>
     <logo>https://Helena-Li.github.io/images/avatar.png</logo>
     <icon>https://Helena-Li.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, Web development</rights>
+    <rights>All rights reserved 2021, Web development</rights>
     <entry>
         <title type="html"><![CDATA[The difference between a function component and a class component to trigger children form changes in Ant design ]]></title>
         <id>https://Helena-Li.github.io/post/the-difference-between-a-function-component-and-a-class-component-to-trigger-children-form-changes-in-ant-design</id>
