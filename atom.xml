@@ -2,13 +2,63 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Helena-Li.github.io</id>
     <title>Web development</title>
-    <updated>2021-06-09T23:08:06.964Z</updated>
+    <updated>2021-06-09T23:09:05.305Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Helena-Li.github.io"/>
     <link rel="self" href="https://Helena-Li.github.io/atom.xml"/>
     <logo>https://Helena-Li.github.io/images/avatar.png</logo>
     <icon>https://Helena-Li.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Web development</rights>
+    <entry>
+        <title type="html"><![CDATA[Authorize in Swagger for .net core project]]></title>
+        <id>https://Helena-Li.github.io/post/authorize-in-swagger-for-net-core-project</id>
+        <link href="https://Helena-Li.github.io/post/authorize-in-swagger-for-net-core-project">
+        </link>
+        <updated>2021-02-28T13:53:53.000Z</updated>
+        <content type="html"><![CDATA[<p>Swagger is a very useful feature in back-end. It provides a easy way to test API and gives lots of details of the interfaces. However, when most of the API are protected by authentication. How to get access to these APIs through swagger will be discussed here.</p>
+<p>The content is:</p>
+<ul>
+<li>set up swagger in startup file</li>
+<li>configure authentication through Auth0</li>
+<li>add authorization for swagger.</li>
+</ul>
+<h2 id="1-set-up-swagger-in-startup-file">1. Set up swagger in startup file</h2>
+<p>Install the nuget package Swashbuckle.AspNetCore<br>
+Add the following code to ConfigureServices in Startup.cs</p>
+<pre><code class="language-c#">services.AddSwaggerGen(c =&gt;
+{
+    c.SwaggerDoc(&quot;v1&quot;, new OpenApiInfo { Title = &quot;StudentSIMS&quot;, Version = &quot;v1&quot; });
+});
+</code></pre>
+<p>Add the following to <code>Configure</code>:</p>
+<pre><code class="language-c#">app.UseSwagger();
+// Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+// specifying the Swagger JSON endpoint.
+app.UseSwaggerUI(c =&gt;
+{
+    c.SwaggerEndpoint(&quot;/swagger/v1/swagger.json&quot;, &quot;My first API V1&quot;);
+    c.RoutePrefix = string.Empty; // launch swagger from root
+});
+</code></pre>
+<p>Then you should be greeted with a nice Swagger UI, when you run the program.</p>
+<h2 id="2-configure-authentication-through-auth0">2. Configure authentication through Auth0</h2>
+<p>Here we use Auth0 to do authentication. Because how to setup an api in Auth0 is described very clear, we won't repeat it.  You can check the quick start after you generate you API on Auth0.</p>
+<pre><code class="language-c#">// 1. Add Authentication Services
+        services.AddAuthentication(options =&gt;
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =&gt;
+        {
+            options.Authority = 	
+                $&quot;https://{Auth0Config.yourDomain}/&quot;
+            options.Audience = Auth0Config.yourApiIdentifier;
+        });
+</code></pre>
+<p>Remember to enable authentication middleware <code>app.UseAuthentication();</code></p>
+<p>If you want  to use permissions, you can add authorization policies in your code. For references, look up https://auth0.com/docs/quickstart/backend/aspnet-core-webapi/01-authorization</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[The difference between a function component and a class component to trigger children form changes in Ant design ]]></title>
         <id>https://Helena-Li.github.io/post/the-difference-between-a-function-component-and-a-class-component-to-trigger-children-form-changes-in-ant-design</id>
