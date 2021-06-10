@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Helena-Li.github.io/favicon.ico?v=1623306030883">
+<link rel="shortcut icon" href="https://Helena-Li.github.io/favicon.ico?v=1623307525388">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://Helena-Li.github.io/styles/main.css">
 
@@ -36,7 +36,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Helena-Li.github.io">
-        <img src="https://Helena-Li.github.io/images/avatar.png?v=1623306030883" class="site-logo">
+        <img src="https://Helena-Li.github.io/images/avatar.png?v=1623307525388" class="site-logo">
         <h1 class="site-title">Web development</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -125,6 +125,14 @@ We could go further.</p>
 <li>you don't have to create a machine to machine application, except you need to use a client Id to get token. For instance, you need to use swagger to Authenticate.</li>
 <li>you need to add audience and scope into your frontend. Because backend is using audience and domain (may have claims) to authenticate, without these items, the access token is not valid for backend. You could find, the access token become longer after these 2 items are added.</li>
 </ol>
+<h2 id="sdks-for-frontend">SDKs for Frontend</h2>
+<p>I found there's 3 SDKs for my Angular application - auth0/auth0-angular, auth0/auth0-spa-js and auth0-js. I was very confused. So here is some explanation:</p>
+<ol>
+<li>React and Angualr has library, so in angular app, can use auth0/auth0-angular</li>
+<li>auth0/auth0-spa-js is for single page application, it can be used in app writen by Javascript, Vue, Angular and React</li>
+<li>auth0-js is the old one, can integrte with more platform, ex: ionic.</li>
+</ol>
+<p>So when you choose the SDK, the specific SDK towards your library, ex: auth0/auth0-angular, would be simpler and less work to integrate with.</p>
 
             </div>
             

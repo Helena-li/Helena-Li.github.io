@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Helena-Li.github.io</id>
     <title>Web development</title>
-    <updated>2021-06-10T06:20:38.530Z</updated>
+    <updated>2021-06-10T06:45:32.658Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Helena-Li.github.io"/>
     <link rel="self" href="https://Helena-Li.github.io/atom.xml"/>
@@ -14,7 +14,7 @@
         <id>https://Helena-Li.github.io/post/understand-auth0-1-api-and-app</id>
         <link href="https://Helena-Li.github.io/post/understand-auth0-1-api-and-app">
         </link>
-        <updated>2021-06-10T14:17:14.000Z</updated>
+        <updated>2021-06-10T18:17:14.000Z</updated>
         <content type="html"><![CDATA[<p>Understand Auth0 (1) - API and APP<br>
 Auth0 is a platform to implement authentication and authorisation. Through auth0, you can easily sign up/ login users in your APP.</p>
 <h2 id="first-touch-on-auth0-app">First touch on Auth0 - APP</h2>
@@ -38,6 +38,14 @@ We could go further.</p>
 <li>you don't have to create a machine to machine application, except you need to use a client Id to get token. For instance, you need to use swagger to Authenticate.</li>
 <li>you need to add audience and scope into your frontend. Because backend is using audience and domain (may have claims) to authenticate, without these items, the access token is not valid for backend. You could find, the access token become longer after these 2 items are added.</li>
 </ol>
+<h2 id="sdks-for-frontend">SDKs for Frontend</h2>
+<p>I found there's 3 SDKs for my Angular application - auth0/auth0-angular, auth0/auth0-spa-js and auth0-js. I was very confused. So here is some explanation:</p>
+<ol>
+<li>React and Angualr has library, so in angular app, can use auth0/auth0-angular</li>
+<li>auth0/auth0-spa-js is for single page application, it can be used in app writen by Javascript, Vue, Angular and React</li>
+<li>auth0-js is the old one, can integrte with more platform, ex: ionic.</li>
+</ol>
+<p>So when you choose the SDK, the specific SDK towards your library, ex: auth0/auth0-angular, would be simpler and less work to integrate with.</p>
 ]]></content>
     </entry>
     <entry>
