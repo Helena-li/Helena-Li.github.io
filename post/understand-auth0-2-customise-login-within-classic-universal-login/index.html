@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Understand Auth0 (2) - Customise Login within classic universal login | Web development</title>
+<meta name="description" content="">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Helena-Li.github.io/favicon.ico?v=1623369053366">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://Helena-Li.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Helena-Li.github.io">
+        <img src="https://Helena-Li.github.io/images/avatar.png?v=1623369053366" class="site-logo">
+        <h1 class="site-title">Web development</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            Home
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            List of Articles
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            Tags
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            About
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Helena-Li.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Understand Auth0 (2) - Customise Login within classic universal login</h2>
+            <div class="post-date">2021-06-11</div>
+            
+            <div class="post-content">
+              <h1 id="understand-auth0-2-customise-login-within-classic-universal-login">Understand Auth0 (2) - Customise Login within classic universal login</h1>
+<p>Most of the time, there're requirements on customise login page. For build in login page, there<br>
+are new universal login and classic universal login. Because there are conflict if we open customise login page and use new universal login, we talk about the classic one.</p>
+<p>According to the depth of the requirements to customise login page, I category it into 3 layers:</p>
+<ol>
+<li>basic universal login custom</li>
+<li>customise universal login with 'lock'</li>
+<li>customise universal login with 'custom login form'</li>
+</ol>
+<p>Also, there's another option to use management API to customise the login page, we haven't touch it yet. So we focus on changes of Auth0 platform.</p>
+<h2 id="basic-universal-login-custom">Basic universal login custom</h2>
+<p>Both for classic and new universal login, people can change logo, page background color and login button color on dashboard. we could make changes in dashboard -&gt; branding -&gt; universal login -&gt; setting.</p>
+<p>Also, can change logo on tenant setting.</p>
+<h2 id="customise-universal-login-with-lock">Customise universal login with 'lock'</h2>
+<p>If basic custom is not enough, we could switch on custom login button in dashboard -&gt; branding -&gt; universal login -&gt; login.</p>
+<p>The default template is lock. Since the login form is written in lock, we need to use the provided configure options to made the change.</p>
+<p>Auth0 provides lock configure options, or we could directly write html/css/jQuery in the script.</p>
+<h3 id="lock-configuration">Lock configuration</h3>
+<p>Refer https://auth0.com/docs/libraries/lock/lock-configuration, we can configure login form based on the provided options. these fields are commonly touched:</p>
+<ul>
+<li>add addition sign up fields</li>
+<li>language Dictionary to change text</li>
+<li>allow sign up</li>
+<li>must accept terms</li>
+</ul>
+<h4 id="addition-sign-up-fields">Addition sign up fields</h4>
+<p>Addition sign up fields will directly add into user metadata at the pre-register hook. The type of the fields could be specified.</p>
+<pre><code>var options = { 
+	additionalSignUpFields: [
+	{ 
+		name: &quot;address&quot;, 
+		placeholder: &quot;enter your address&quot;, 
+		// The following properties are optional 
+		icon: &quot;https://example.com/assests/address_icon.png&quot;, 
+		prefill: &quot;street 123&quot;, 
+		validator: function(address) { 
+			return { 
+				valid: address.length &gt;= 10, 
+				hint: &quot;Must have 10 or more chars&quot; // optional 
+			}; 
+		}
+	}, 
+	{ 
+		name: &quot;full_name&quot;, 
+		placeholder: &quot;Enter your full name&quot; 
+	},
+	{ 
+		type: &quot;select&quot;, 
+		name: &quot;location&quot;, 
+		placeholder: &quot;choose your location&quot;, 
+		options: [ 
+			{value: &quot;us&quot;, label: &quot;United States&quot;}, 
+			{value: &quot;fr&quot;, label: &quot;France&quot;}, 
+			{value: &quot;ar&quot;, label: &quot;Argentina&quot;} 
+		], 
+		// The following properties are optional  
+		icon: &quot;https://example.com/assests/location_icon.png&quot;, 
+		prefill: &quot;us&quot; 
+	}] 
+}
+</code></pre>
+<h4 id="language-dictionary-to-change-text">Language Dictionary to change text</h4>
+<pre><code>languageDictionary: {
+                loginLabel: &quot;Login&quot;,
+                loginSubmitLabel: &quot;Login&quot;,
+                signUpLabel: &quot;Activate&quot;,
+                signUpSubmitLabel: &quot;Activate account&quot;,
+                emailInputPlaceholder: &quot;Email&quot;,
+                passwordInputPlaceholder: &quot;Password&quot;,
+                databaseSignUpInstructions: getContactUsText()
+}
+
+var isASite = config.callbackURL.indexOf(&quot;com.a&quot;) &gt; 0;
+var getContactUsText = function () {
+    var contactLink =
+      'Don’t have an account? &lt;a id=&quot;contactLink&quot; target=&quot;_blank&quot; href=&quot;[CONTACT-US-LINK]&quot;&gt;contact us&lt;/a&gt; to sign up'
+             
+    return isASite
+                ? contactLink.replace(&quot;[CONTACT-US-LINK]&quot;, contactA)
+                : contactLink.replace(&quot;[CONTACT-US-LINK]&quot;, contactB);
+        };
+</code></pre>
+<h4 id="must-accept-terms">Must accept terms</h4>
+<pre><code>languageDictionary = { 
+    title: config.dict.signin.title,
+    signUpTerms: &quot;I have read and agree with the &lt;a href='https://terms-and-conditions/' target='_blank'&gt;terms &amp; conditions&lt;/a&gt;&quot;
+};
+mustAcceptTerms: true
+</code></pre>
+<h3 id="custom-by-htmlcssjquery">Custom by html/css/jQuery</h3>
+<p>Although, is not recommended, we could also change everything we want by using plaint html/css/jQuery. We made these changes:</p>
+<ul>
+<li>add background image</li>
+<li>add extra link under login box</li>
+<li>add extra fields in login box</li>
+</ul>
+<h4 id="background-image">Background image</h4>
+<pre><code>body{ 
+        background-color: #000000; 
+        background: url(&quot;https://loginbg.jpg&quot;) no-repeat; 
+        background-size: cover; 
+    } 
+.auth0-lock.auth0-lock.auth0-lock-opened .auth0-lock-overlay { display: none; }
+</code></pre>
+<h4 id="extra-link-out-of-the-login-box">Extra link out of the login box</h4>
+<p>With container can add extra inline content.</p>
+<pre><code>
+&lt;div id=&quot;hiw-login-container&quot; style=&quot;filter: drop-shadow(0 0 0.75rem black)&quot;&gt;	&lt;/div&gt;
+&lt;div style=&quot;text-align: center;&quot;&gt;
+   &lt;a target=&quot;_blank&quot; href='https://account'&gt;
+	   &lt;div style=&quot;color: white; text-decoration: none;&quot; &gt;
+		   Create an Account
+	   &lt;/div&gt;
+   &lt;/a&gt;
+&lt;/div&gt;
+
+&lt;script&gt; 
+	var options = { container: 'hiw-login-container' }; 
+	// initialize 
+	var lock = new Auth0Lock('xxxxxx', '&lt;account&gt;.auth0.com', options); 
+	// render 
+	lock.show(); 
+&lt;/script&gt;
+</code></pre>
+<h4 id="extra-fields-in-login-box">Extra fields in login box</h4>
+<p>Fetch the position where you want to add fields, and then insert your content.</p>
+<pre><code> var createExtra = function () {
+    var addConfirmField = function () {
+
+    var tag =
+         '&lt;div class=&quot;auth0-lock-input-block auth0-lock-input-show-password&quot; &gt;'+
+         '&lt;div class=&quot;auth0-lock-input-block auth0-lock-input-password&quot; &gt;'+
+         '&lt;div class=&quot;auth0-lock-input-wrap auth0-lock-input-wrap-with-icon&quot; &gt;'+
+         '&lt;input class=&quot;confirm-password&quot; name=&quot;confirmPassword&quot; type=&quot;password&quot; placeholder=&quot;Confirm Password&quot; autocomplete=&quot;off&quot; autocapitalize=&quot;off&quot;'
+          +
+         &quot;&lt;/input&gt;&quot;+
+         &quot;&lt;/div&gt;&quot;+
+         &quot;&lt;/div&gt;&quot;+
+         &quot;&lt;/div&gt;&quot;;
+   $(&quot;.auth0-lock-input-show-password&quot;)
+                    .parent()
+                    .append(tag);
+            };
+      
+   var addConfirmErrorField = function () {
+
+     var tag =
+       '&lt;label class=&quot;confirm-password-error&quot; name=&quot;confirmPasswordError&quot;'+
+                    '&quot;&gt;' 
+                    +&quot; Those passwords didn’t match. Try again.&quot;
+                    &quot;&lt;/label&gt;&quot;;
+    $(&quot;.auth0-lock-input-show-password&quot;)
+                    .parent()
+                    .append(tag);
+            };
+
+    addConfirmField();
+    addConfirmErrorField();
+ };
+</code></pre>
+<h2 id="customise-universal-login-with-custom-login-form">Customise universal login with 'custom login form'</h2>
+<p>After switch on custom login, there's a template dropdown. If select 'custom login form', and preview, can see it's plaint Javascript written page. We can write whatever we want here.</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://Helena-Li.github.io/tag/AnJlneHcw" class="tag">
+                    Auth0
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">Next</div>
+                <a href="https://Helena-Li.github.io/post/understand-auth0-1-api-and-app">
+                  <h3 class="post-title">
+                    Understand Auth0 (1) - API and APP
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: [''],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
