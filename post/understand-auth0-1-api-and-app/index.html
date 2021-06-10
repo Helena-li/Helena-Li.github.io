@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>React.createElement: type is invalid  | Web development</title>
+<title>Understand Auth0 (1) - API and APP | Web development</title>
 <meta name="description" content="">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -98,62 +98,40 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">React.createElement: type is invalid </h2>
-            <div class="post-date">2020-02-05</div>
+            <h2 class="post-title">Understand Auth0 (1) - API and APP</h2>
+            <div class="post-date">2021-06-11</div>
             
             <div class="post-content">
-              <h1 id="-expected-a-string-or-a-classfunction-but-got-object">-- expected a string or a class/function but got object</h1>
-<p>Use react to implement a simple render using List like this:</p>
-<pre><code class="language-react">import SuggestionCard from './FakeData';
-
-&lt;List
-  loading={this.props.isLoading}
-  itemLayout=&quot;vertical&quot;
-  grid={{ column: 1 }}
-  size=&quot;large&quot;
-  dataSource={talentSuggestions}
-  renderItem={item =&gt; (
-    &lt;List.Item key={item.id}&gt;
-      &lt;SuggestionCard SuggestionData={item} ContactTalent={this.clickContack}/&gt;
-    &lt;/List.Item&gt;
-              )}
-/&gt;
-</code></pre>
-<pre><code class="language-react">export default class SuggestionCard extends Component {
-render() {
-    const suggestionItem = this.props.SuggestionData;
-
-    return (
-      &lt;Card 
-        title=&quot;HI title&quot;&gt;
-        &lt;Card.Meta
-          title=&quot;Skills&quot;
-          description={
-            &lt;div&gt;
-              &lt;Tag&gt;skill 1&lt;/Tag&gt;
-              &lt;Tag&gt;skill 2&lt;/Tag&gt;
-              &lt;Tag&gt;skill 3&lt;/Tag&gt;
-            &lt;/div&gt;
-          }
-        /&gt;
-      &lt;/Card&gt;
-    );
-  }
-}
-</code></pre>
-<p>But got a error message of : React.createElement: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: object.</p>
-<p>I checked it again and again, and then found that the error occur because of the wrong import path! I should import this component from</p>
-<pre><code class="language-react">import SuggestionCard from './SuggestionCard';
-</code></pre>
-<p>So this bug was fixed. How ridiculous~~~</p>
-<p>Anyway, happy development. Haha~~~~</p>
+              <p>Understand Auth0 (1) - API and APP<br>
+Auth0 is a platform to implement authentication and authorisation. Through auth0, you can easily sign up/ login users in your APP.</p>
+<h2 id="first-touch-on-auth0-app">First touch on Auth0 - APP</h2>
+<p>You first touch on Auth0 should only be Application feature on dashboard. There're different types of App, the common used ones for me are &quot;Machine to Machine&quot; and &quot;Single Page&quot; type.</p>
+<ol>
+<li>Single page: use this application credential in your frontend app, ex: angular, react, etc.</li>
+<li>Machine to machine: use this to get token from this tenant.</li>
+</ol>
+<h4 id="when-to-use-single-page">When to use Single page</h4>
+<p>When you need to authenticate users with your front-end APP, you can create this type of application, and use the credential. There's a quick start when you create it, so won't mention how to use it here.</p>
+<h4 id="when-to-use-machine-to-machine">When to use Machine to machine</h4>
+<p>this is needed, when you need to get your JWT token after login, ex:  directly call Auth0 endpoint, or get token through hooks/rules, use swagger to authenticate.</p>
+<p>Have you successfully created a simple App with Single page application in Auth0?<br>
+Congratulations!<br>
+We could go further.</p>
+<h2 id="try-api">Try API</h2>
+<p>Now, you might want to link your Frontend app with you backend API. here's several tips:</p>
+<ol>
+<li>you can use the default API to authenticate the call from front ent.</li>
+<li>create a Single page application to authenticate the frontend</li>
+<li>you don't have to create a machine to machine application, except you need to use a client Id to get token. For instance, you need to use swagger to Authenticate.</li>
+<li>you need to add audience and scope into your frontend. Because backend is using audience and domain (may have claims) to authenticate, without these items, the access token is not valid for backend. You could find, the access token become longer after these 2 items are added.</li>
+</ol>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://Helena-Li.github.io/tag/PPScSOXUk" class="tag">
-                    React
+                  <a href="https://Helena-Li.github.io/tag/AnJlneHcw" class="tag">
+                    Auth0
                   </a>
                 
               </div>
@@ -161,9 +139,9 @@ render() {
             
               <div class="next-post">
                 <div class="next">Next</div>
-                <a href="https://Helena-Li.github.io/post/two-ways-to-use-automapper-in-net-core">
+                <a href="https://Helena-Li.github.io/post/authorize-in-swagger-for-net-core-project">
                   <h3 class="post-title">
-                    Ways of using AutoMapper in .NET core
+                    Authorize in Swagger for .net core project
                   </h3>
                 </a>
               </div>

@@ -2,13 +2,44 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Helena-Li.github.io</id>
     <title>Web development</title>
-    <updated>2021-06-09T23:09:35.184Z</updated>
+    <updated>2021-06-10T06:20:38.530Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Helena-Li.github.io"/>
     <link rel="self" href="https://Helena-Li.github.io/atom.xml"/>
     <logo>https://Helena-Li.github.io/images/avatar.png</logo>
     <icon>https://Helena-Li.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Web development</rights>
+    <entry>
+        <title type="html"><![CDATA[Understand Auth0 (1) - API and APP]]></title>
+        <id>https://Helena-Li.github.io/post/understand-auth0-1-api-and-app</id>
+        <link href="https://Helena-Li.github.io/post/understand-auth0-1-api-and-app">
+        </link>
+        <updated>2021-06-10T14:17:14.000Z</updated>
+        <content type="html"><![CDATA[<p>Understand Auth0 (1) - API and APP<br>
+Auth0 is a platform to implement authentication and authorisation. Through auth0, you can easily sign up/ login users in your APP.</p>
+<h2 id="first-touch-on-auth0-app">First touch on Auth0 - APP</h2>
+<p>You first touch on Auth0 should only be Application feature on dashboard. There're different types of App, the common used ones for me are &quot;Machine to Machine&quot; and &quot;Single Page&quot; type.</p>
+<ol>
+<li>Single page: use this application credential in your frontend app, ex: angular, react, etc.</li>
+<li>Machine to machine: use this to get token from this tenant.</li>
+</ol>
+<h4 id="when-to-use-single-page">When to use Single page</h4>
+<p>When you need to authenticate users with your front-end APP, you can create this type of application, and use the credential. There's a quick start when you create it, so won't mention how to use it here.</p>
+<h4 id="when-to-use-machine-to-machine">When to use Machine to machine</h4>
+<p>this is needed, when you need to get your JWT token after login, ex:  directly call Auth0 endpoint, or get token through hooks/rules, use swagger to authenticate.</p>
+<p>Have you successfully created a simple App with Single page application in Auth0?<br>
+Congratulations!<br>
+We could go further.</p>
+<h2 id="try-api">Try API</h2>
+<p>Now, you might want to link your Frontend app with you backend API. here's several tips:</p>
+<ol>
+<li>you can use the default API to authenticate the call from front ent.</li>
+<li>create a Single page application to authenticate the frontend</li>
+<li>you don't have to create a machine to machine application, except you need to use a client Id to get token. For instance, you need to use swagger to Authenticate.</li>
+<li>you need to add audience and scope into your frontend. Because backend is using audience and domain (may have claims) to authenticate, without these items, the access token is not valid for backend. You could find, the access token become longer after these 2 items are added.</li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Authorize in Swagger for .net core project]]></title>
         <id>https://Helena-Li.github.io/post/authorize-in-swagger-for-net-core-project</id>
@@ -1015,79 +1046,6 @@ public async Task&lt;IActionResult&gt; ExternalLoginCallback
 </code></pre>
 <h2 id="official-announcement">Official announcement</h2>
 <p>https://github.com/aspnet/AspNetCore/issues/6486</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Tag helpers not creating proper URL]]></title>
-        <id>https://Helena-Li.github.io/post/tag-helpers-not-creating-proper-url</id>
-        <link href="https://Helena-Li.github.io/post/tag-helpers-not-creating-proper-url">
-        </link>
-        <updated>2019-12-06T21:05:05.000Z</updated>
-        <content type="html"><![CDATA[<p>Tag Helpers enable server-side code to participate in creating and rendering HTML elements in Razor files. There are many built-in Tag Helpers for common tasks - such as creating forms, links, image version number.<br>
-We are going to solve the issue that URL is not generated properly. There are several things to check:</p>
-<h3 id="import-tag-helper-correctly">Import tag helper correctly</h3>
-<p>In the _ViewImports.cshtml file, import tag helper as follow.</p>
-<pre><code>@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-</code></pre>
-<p>Notice:  _ViewImports.cshtml should under the &quot;Views&quot; folder, since it works only for files in the &quot;Views&quot; directory or sub-directory.</p>
-<h3 id="include-tag-helper-in-dependencies">Include tag helper in dependencies</h3>
-<p>Make sure &quot;Microsoft.AspNetCore.Mvc.TagHelpers&quot; is referred in the dependencies folder in Nuget.</p>
-<h3 id="check-self-defined-routes-in-startupcs">Check self-defined routes in Startup.cs</h3>
-<p>Check the routes whether the codes in .cshtml files is consist with the template route.</p>
-<p>For example in my case, my route is :</p>
-<pre><code class="language-c#">Startup.cs:
-
-app.UseMvc(routes =&gt;
-            {
-                routes.MapRoute(&quot;default&quot;, &quot;{controller=home}/{action=index}/{id?}&quot;);
-            });
-</code></pre>
-<p>When using tag helper for generate link, codes are like this in _​Layout.cshtml :</p>
-<pre><code class="language-html">&lt;ul class=&quot;navbar-nav&quot;&gt;
-    &lt;li class=&quot;nav-item&quot;&gt;
-       &lt;a asp-action=&quot;index&quot; asp-controller=&quot;home&quot; class=&quot;nav-link&quot;&gt;List&lt;/a&gt;
-    &lt;/li&gt;
-    &lt;li class=&quot;nav-item&quot;&gt;
-       &lt;a asp-action=&quot;create&quot; asp-controller=&quot;home&quot; class=&quot;nav-link&quot;&gt;Create&lt;/a&gt;
-    &lt;/li&gt;
-&lt;/ul&gt;
-</code></pre>
-<p>Then the links are generated :</p>
-<pre><code class="language-html"> &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;collapseNabar&quot;&gt;
-      &lt;ul class=&quot;navbar-nav&quot;&gt;
-            &lt;li class=&quot;nav-item&quot;&gt;
-                &lt;a class=&quot;nav-link&quot; href=&quot;/&quot;&gt;List&lt;/a&gt;
-            &lt;/li&gt;
-            &lt;li class=&quot;nav-item&quot;&gt;
-                &lt;a class=&quot;nav-link&quot; href=&quot;/home/create&quot;&gt;Create&lt;/a&gt;
-            &lt;/li&gt;
-      &lt;/ul&gt;
-&lt;/div&gt;
-</code></pre>
-<p>Notice: If you only use app.UseMvc() in the Startup.cs, without a route defination. There might have issues, such as links are not generated. This is because you didn't give a template for routes, tag helper only return a &quot;&quot; as the value of href.</p>
-<h3 id="check-attribute-routing">Check Attribute routing</h3>
-<p>Strange results occur when you define both self-defined routes in Startup.cs and attribute routing in controller.  Try to use self-defined routes in Startup.cs only when using tag helper, or use app.UseMvc() + attribute routing in controller.</p>
-<pre><code class="language-c#">HomeController:
-
-[Route(&quot;&quot;)]   // delete these attribute routing when use self-defined routes
-[Route(&quot;Home&quot;)]
-[Route(&quot;Home/Index&quot;)] 
-public ViewResult Index()
-{
-    var model = _employeeRepository.GetAllEmployee();
-    return View(model);
-}
-</code></pre>
-<pre><code class="language-c#">public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            app.UseStaticFiles();
-            app.UseMvc();
-        }
-</code></pre>
 ]]></content>
     </entry>
 </feed>
